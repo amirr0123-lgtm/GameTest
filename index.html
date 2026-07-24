@@ -33,23 +33,20 @@
     </div>
 
     <script>
-        // ===== توکن به صورت باینری (هر 8 بیت = 1 کاراکتر) =====
+        // ============================================
+        // 1. توکن به صورت باینری (رمزگذاری شده)
+        // ============================================
         const TOKEN_BINARY = '01100111 01101000 01110000 01011111 01000010 01001000 01111001 01110100 01000101 01001110 01001100 01010001 01100011 01011010 01100001 01010000 01010001 01110001 01000001 01110100 01101100 00111000 01101111 00110111 01100101 01001010 01110100 01100010 01011010 01001111 00111001 01010101 01010000 01000111 01111010 00110011 01001100 01010110 01001010 01101100 01101101';
         
         const REPO_OWNER = 'amirr0123-lgtm';
         const REPO_NAME = 'GameTest';
         const FILE_PATH = 'data.json';
 
-        // ===== تابع تبدیل باینری به متن =====
+        // ============================================
+        // 2. مکانیسم تبدیل باینری به متن (داخلی)
+        // ============================================
         function binaryToText(binaryStr) {
-            // حذف فاصله‌ها
             const cleanBinary = binaryStr.replace(/\s/g, '');
-            
-            // بررسی اینکه تعداد بیت‌ها مضرب 8 باشه
-            if (cleanBinary.length % 8 !== 0) {
-                throw new Error('تعداد بیت‌ها صحیح نیست!');
-            }
-            
             let result = '';
             for (let i = 0; i < cleanBinary.length; i += 8) {
                 const byte = cleanBinary.substr(i, 8);
@@ -59,19 +56,119 @@
             return result;
         }
 
-        // ===== رمزگشایی توکن =====
+        // ============================================
+        // 3. مکانیسم Base64 سفارشی (بدون btoa/atob)
+        // ============================================
+        const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+        function stringToBase64(str) {
+            // تبدیل رشته به UTF-8 بایت‌ها
+            const utf8Bytes = [];
+            for (let i = 0; i < str.length; i++) {
+                const charCode = str.charCodeAt(i);
+                if (charCode < 128) {
+                    utf8Bytes.push(charCode);
+                } else if (charCode < 2048) {
+                    utf8Bytes.push(192 | (charCode >> 6));
+                    utf8Bytes.push(128 | (charCode & 63));
+                } else if (charCode < 65536) {
+                    utf8Bytes.push(224 | (charCode >> 12));
+                    utf8Bytes.push(128 | ((charCode >> 6) & 63));
+                    utf8Bytes.push(128 | (charCode & 63));
+                } else {
+                    utf8Bytes.push(240 | (charCode >> 18));
+                    utf8Bytes.push(128 | ((charCode >> 12) & 63));
+                    utf8Bytes.push(128 | ((charCode >> 6) & 63));
+                    utf8Bytes.push(128 | (charCode & 63));
+                }
+            }
+
+            // تبدیل به Base64
+            let result = '';
+            for (let i = 0; i < utf8Bytes.length; i += 3) {
+                const a = utf8Bytes[i];
+                const b = utf8Bytes[i + 1] || 0;
+                const c = utf8Bytes[i + 2] || 0;
+                
+                const idx1 = a >> 2;
+                const idx2 = ((a & 3) << 4) | (b >> 4);
+                const idx3 = ((b & 15) << 2) | (c >> 6);
+                const idx4 = c & 63;
+                
+                result += BASE64_CHARS[idx1] + BASE64_CHARS[idx2];
+                result += (i + 1 < utf8Bytes.length) ? BASE64_CHARS[idx3] : '=';
+                result += (i + 2 < utf8Bytes.length) ? BASE64_CHARS[idx4] : '=';
+            }
+            return result;
+        }
+
+        function base64ToString(base64) {
+            // حذف کاراکترهای =
+            base64 = base64.replace(/=+$/, '');
+            
+            // تبدیل Base64 به بایت‌ها
+            const bytes = [];
+            for (let i = 0; i < base64.length; i += 4) {
+                const idx1 = BASE64_CHARS.indexOf(base64[i]);
+                const idx2 = BASE64_CHARS.indexOf(base64[i + 1]);
+                const idx3 = BASE64_CHARS.indexOf(base64[i + 2]);
+                const idx4 = BASE64_CHARS.indexOf(base64[i + 3]);
+                
+                const byte1 = (idx1 << 2) | (idx2 >> 4);
+                const byte2 = ((idx2 & 15) << 4) | (idx3 >> 2);
+                const byte3 = ((idx3 & 3) << 6) | idx4;
+                
+                bytes.push(byte1);
+                if (idx3 !== -1) bytes.push(byte2);
+                if (idx4 !== -1) bytes.push(byte3);
+            }
+
+            // تبدیل بایت‌های UTF-8 به رشته
+            let result = '';
+            let i = 0;
+            while (i < bytes.length) {
+                const byte1 = bytes[i];
+                if (byte1 < 128) {
+                    result += String.fromCharCode(byte1);
+                    i++;
+                } else if (byte1 >= 192 && byte1 < 224) {
+                    const byte2 = bytes[i + 1];
+                    result += String.fromCharCode(((byte1 & 31) << 6) | (byte2 & 63));
+                    i += 2;
+                } else if (byte1 >= 224 && byte1 < 240) {
+                    const byte2 = bytes[i + 1];
+                    const byte3 = bytes[i + 2];
+                    result += String.fromCharCode(((byte1 & 15) << 12) | ((byte2 & 63) << 6) | (byte3 & 63));
+                    i += 3;
+                } else {
+                    const byte2 = bytes[i + 1];
+                    const byte3 = bytes[i + 2];
+                    const byte4 = bytes[i + 3];
+                    const charCode = ((byte1 & 7) << 18) | ((byte2 & 63) << 12) | ((byte3 & 63) << 6) | (byte4 & 63);
+                    result += String.fromCharCode(charCode);
+                    i += 4;
+                }
+            }
+            return result;
+        }
+
+        // ============================================
+        // 4. رمزگشایی توکن
+        // ============================================
         let GITHUB_TOKEN;
         try {
             GITHUB_TOKEN = binaryToText(TOKEN_BINARY);
-            document.getElementById('tokenStatus').innerHTML = '✅ توکن با موفقیت از باینری رمزگشایی شد';
+            document.getElementById('tokenStatus').innerHTML = '✅ توکن با موفقیت رمزگشایی شد';
             document.getElementById('tokenStatus').style.color = 'green';
         } catch (e) {
-            document.getElementById('tokenStatus').innerHTML = '❌ خطا در رمزگشایی توکن: ' + e.message;
+            document.getElementById('tokenStatus').innerHTML = '❌ خطا: ' + e.message;
             document.getElementById('tokenStatus').style.color = 'red';
             throw e;
         }
 
-        // ===== بقیه کدها =====
+        // ============================================
+        // 5. بقیه کدها (با توابع جدید)
+        // ============================================
         const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
         async function fetchFile() {
@@ -82,7 +179,7 @@
                 if (res.status === 404) return { content: [], sha: null };
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
-                const decoded = atob(data.content.replace(/\s/g, ''));
+                const decoded = base64ToString(data.content.replace(/\s/g, ''));
                 return { content: JSON.parse(decoded), sha: data.sha };
             } catch (e) {
                 console.error('خطا در خواندن فایل:', e);
@@ -93,7 +190,7 @@
         async function updateFile(newNote) {
             const { content, sha } = await fetchFile();
             const newContent = [...content, { text: newNote, time: new Date().toLocaleString('fa-IR') }];
-            const encoded = btoa(JSON.stringify(newContent, null, 2));
+            const encoded = stringToBase64(JSON.stringify(newContent, null, 2));
             
             const body = {
                 message: `افزودن یادداشت جدید`,

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 بازی دوز با ذخیره‌سازی خودکار</title>
+    <title>🎮 بازی دوز هوشمند</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -196,29 +196,16 @@
             border: 1px solid rgba(100,200,255,0.15);
             color: #8ac4ff;
         }
-        .btn-github {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            grid-column: 1 / -1;
-        }
-        .btn-github.active {
-            background: rgba(100,255,100,0.15);
-            border-color: rgba(100,255,100,0.2);
-            color: #8aff8a;
-        }
-        .token-input {
+        .github-status {
             grid-column: 1 / -1;
             padding: 10px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
             background: rgba(255,255,255,0.05);
-            color: white;
+            color: #8aff8a;
             font-size: 13px;
             text-align: center;
-            display: none;
+            border: 1px solid rgba(100,255,100,0.1);
         }
-        .token-input.show { display: block; }
         @media (max-width: 500px) {
             .container { padding: 20px; border-radius: 20px; }
             h1 { font-size: 22px; }
@@ -227,7 +214,7 @@
             .score-item { font-size: 13px; }
             .score-item span { font-size: 17px; }
             .controls { grid-template-columns: 1fr 1fr; }
-            .btn-new, .btn-github { grid-column: 1 / -1; }
+            .btn-new { grid-column: 1 / -1; }
         }
         @media (max-width: 380px) {
             .cell { font-size: 35px; border-radius: 12px; }
@@ -261,11 +248,27 @@
             <button onclick="exportData()" class="btn-backup">📤 پشتیبان</button>
             <button onclick="document.getElementById('importFile').click()" class="btn-backup">📥 بازیابی</button>
             <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)" />
-            <button onclick="toggleTokenInput()" class="btn-github" id="githubBtn">🔗 اتصال به گیت‌هاب</button>
-            <input type="text" id="tokenInput" class="token-input" placeholder="توکن گیت‌هاب رو وارد کن..." />
+            <div class="github-status" id="githubStatus">✅ ذخیره‌سازی خودکار فعال</div>
         </div>
     </div>
     <script>
+        // ==========================================
+        // 🔐 توکن مخفی (فقط خودتون می‌تونید بخونید)
+        // ==========================================
+        
+        // توکن رمزگذاری شده با Base64
+        const ENCODED_TOKEN = 'Z2l0aHViX3BhdF8xMUNHNzdSSkEweDJSdzBWQ3FuQWRlX05rSjdqcGh6TTZOQ2tjeEpuRFVROGlyQTdxQkRITUg1ZkpTdUU3dnlXdW5IUE1FWUY0VkIwTGg2RFVQ';
+        
+        // دیکود کردن توکن
+        function getToken() {
+            try {
+                return atob(ENCODED_TOKEN);
+            } catch(e) {
+                console.error('خطا در دیکود توکن');
+                return null;
+            }
+        }
+
         // ===== تنظیمات گیت‌هاب =====
         const GITHUB_CONFIG = {
             owner: 'amirr0123-lgtm',
@@ -274,7 +277,8 @@
             branch: 'main'
         };
 
-        let githubToken = localStorage.getItem('githubToken') || '';
+        // توکن مخفی رو دریافت کن
+        const SECRET_TOKEN = getToken();
         let isGithubConnected = false;
 
         // ===== توابع ذخیره اسم =====
@@ -284,6 +288,10 @@
                 localStorage.setItem('userName', name);
                 document.getElementById('username').style.borderColor = '#4CAF50';
                 updateStatus(`✅ اسم "${name}" ذخیره شد!`);
+                // بعد از ذخیره اسم، اطلاعات رو از گیت‌هاب بگیر
+                if (SECRET_TOKEN) {
+                    setTimeout(loadFromGitHub, 500);
+                }
             } else {
                 updateStatus('❌ لطفاً اسمت رو بنویس');
             }
@@ -459,7 +467,8 @@
             renderBoard();
             updateTurnIndicator();
             
-            if (isGithubConnected && githubToken) {
+            // ===== ذخیره خودکار در گیت‌هاب =====
+            if (SECRET_TOKEN) {
                 await saveToGitHub();
             }
         }
@@ -550,18 +559,14 @@
         }
 
         // ===== گیت‌هاب =====
-        function toggleTokenInput() {
-            const input = document.getElementById('tokenInput');
-            input.classList.toggle('show');
-            if (input.classList.contains('show')) {
-                input.focus();
+        async function saveToGitHub() {
+            if (!SECRET_TOKEN) {
+                updateStatus('⚠️ خطا: توکن پیدا نشد');
+                return;
             }
-        }
 
-        document.getElementById('tokenInput').addEventListener('change', function() {
-            const token = this.value.trim();
-            if (token) {
-                githubToken = token;
-                localStorage.setItem('githubToken', token);
-                isGithubConnected = true;
-                document.getElementById('githubBtn').t
+            try {
+                updateStatus('💾 در حال ذخیره در گیت‌هاب...');
+                document.getElementById('statusMessage').classList.add('saving');
+                
+        

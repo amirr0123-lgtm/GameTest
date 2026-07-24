@@ -1,642 +1,483 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 بازی دوز حرفه‌ای</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📝 سیستم ثبت اطلاعات</title>
     <style>
-        /* ===== RESET ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #0b1120, #1a2744);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background: linear-gradient(145deg, #0b1120, #1a2744);
         }
 
         .container {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(16px);
-            padding: 30px;
+            padding: 35px;
             border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.06);
-            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 550px;
             width: 100%;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
         }
 
-        /* ===== HEADER ===== */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
         h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
             background: linear-gradient(135deg, #f093fb, #f5576c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .turn-box {
-            background: rgba(255,255,255,0.06);
-            padding: 6px 16px;
-            border-radius: 30px;
+
+        .subtitle {
+            text-align: center;
+            color: #8a9bb5;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
             color: #c8d0e6;
             font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.05);
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
-        /* ===== USER ===== */
-        .user-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-        .user-row input {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.06);
             border-radius: 14px;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.04);
             color: #fff;
-            font-size: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 16px;
+            transition: 0.3s;
         }
-        .user-row input:focus {
+
+        input:focus {
             outline: none;
             border-color: #f5576c;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.07);
         }
-        .btn-save {
-            padding: 12px 22px;
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
             border: none;
             border-radius: 14px;
             background: linear-gradient(135deg, #f093fb, #f5576c);
             color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-save:active { transform: scale(0.94); }
-
-        /* ===== SCORE ===== */
-        .score-row {
-            display: flex;
-            justify-content: space-around;
-            padding: 14px;
-            background: rgba(0,0,0,0.25);
-            border-radius: 16px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-        .score-item {
-            color: #b0bcdb;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .score-item span {
-            font-weight: 700;
-            font-size: 20px;
-        }
-        .sc-x { color: #f7c948; }
-        .sc-o { color: #5fc3ff; }
-        .sc-draw { color: #a8b5d9; }
-
-        /* ===== GRID ===== */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            aspect-ratio: 1;
-            margin-bottom: 20px;
-        }
-
-        .cell {
-            background: rgba(255,255,255,0.04);
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 62px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
-            border: 2px solid rgba(255,255,255,0.04);
-            box-shadow: 0 6px 0 rgba(0,0,0,0.3);
-            color: #fff;
-            user-select: none;
-        }
-        .cell:hover:not(.taken) {
-            background: rgba(255,255,255,0.08);
-            transform: scale(1.02);
-        }
-        .cell.taken { cursor: default; transform: scale(0.96); }
-        .cell.win {
-            border-color: #ffd700;
-            box-shadow: 0 0 30px rgba(255,215,0,0.3);
-            animation: pulse 0.7s infinite alternate;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); background: rgba(255,215,0,0.08); }
-            100% { transform: scale(1.05); background: rgba(255,215,0,0.2); }
-        }
-        .cell .x {
-            color: #f7c948;
-            filter: drop-shadow(0 0 18px #f7c94866);
-            animation: pop 0.25s ease;
-        }
-        .cell .o {
-            color: #5fc3ff;
-            filter: drop-shadow(0 0 18px #5fc3ff66);
-            animation: pop 0.25s ease;
-        }
-        @keyframes pop {
-            0% { transform: scale(0) rotate(-30deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0); opacity: 1; }
+            transition: 0.3s;
+            margin-top: 5px;
         }
 
-        /* ===== STATUS ===== */
+        .btn-submit:active {
+            transform: scale(0.96);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .status {
-            text-align: center;
             padding: 12px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 16px;
-            color: #b0bcdb;
-            font-size: 15px;
-            margin-bottom: 18px;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-
-        /* ===== BUTTONS ===== */
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .controls button {
-            padding: 14px;
-            border: none;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #fff;
-        }
-        .controls button:active { transform: scale(0.94); }
-        .btn-new {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            grid-column: 1 / -1;
-        }
-        .btn-reset {
-            background: rgba(255,80,80,0.15);
-            border: 1px solid rgba(255,80,80,0.15);
-            color: #ff9e9e;
-        }
-        .btn-backup {
-            background: rgba(100,200,255,0.08);
-            border: 1px solid rgba(100,200,255,0.08);
-            color: #8ac4ff;
-        }
-        .gh-status {
-            grid-column: 1 / -1;
-            padding: 10px;
             border-radius: 12px;
-            background: rgba(255,255,255,0.03);
-            color: #7aff8a;
-            font-size: 13px;
+            margin: 15px 0;
             text-align: center;
-            border: 1px solid rgba(100,255,100,0.06);
+            font-size: 14px;
+            display: none;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .container { padding: 20px; }
-            .cell { font-size: 44px; border-radius: 16px; }
-            .grid { gap: 10px; }
-            .score-item { font-size: 13px; }
-            .score-item span { font-size: 17px; }
+        .status.success {
+            display: block;
+            color: #7aff8a;
+            border-color: rgba(100, 255, 100, 0.15);
         }
-        @media (max-width: 370px) {
-            .cell { font-size: 34px; border-radius: 12px; }
-            .grid { gap: 8px; }
+
+        .status.error {
+            display: block;
+            color: #ff8a8a;
+            border-color: rgba(255, 100, 100, 0.15);
+        }
+
+        .status.loading {
+            display: block;
+            color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+
+        .history-section {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 20px;
+        }
+
+        .history-title {
+            color: #c8d0e6;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-title span {
+            font-size: 13px;
+            font-weight: 400;
+            color: #8a9bb5;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: 0.2s;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .history-item .name {
+            color: #f093fb;
+            font-weight: 600;
+        }
+
+        .history-item .pass {
+            color: #8a9bb5;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+
+        .history-item .time {
+            color: #5a6b85;
+            font-size: 12px;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: #5a6b85;
+            padding: 30px 0;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            color: #8a9bb5;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            input {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+            .btn-submit {
+                padding: 14px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- HEADER -->
-    <div class="header">
-        <h1>✦ بازی دوز</h1>
-        <div class="turn-box" id="turnText">نوبت شما</div>
+    <div class="container">
+        <!-- HEADER -->
+        <h1>📝 ثبت اطلاعات</h1>
+        <p class="subtitle">نام و رمز خود را وارد کنید تا در گیت‌هاب ذخیره شود</p>
+
+        <!-- FORM -->
+        <form id="dataForm" onsubmit="submitData(event)">
+            <div class="form-group">
+                <label>👤 نام کاربری</label>
+                <input type="text" id="username" placeholder="مثلاً: amir" required />
+            </div>
+
+            <div class="form-group">
+                <label>🔑 رمز عبور</label>
+                <input type="text" id="password" placeholder="رمز خود را وارد کنید" required />
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">💾 ذخیره در گیت‌هاب</button>
+        </form>
+
+        <!-- STATUS -->
+        <div class="status" id="status"></div>
+
+        <!-- HISTORY -->
+        <div class="history-section">
+            <div class="history-title">
+                📜 تاریخچه ثبت‌ها
+                <span id="countBadge" class="badge">۰ مورد</span>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">هنوز اطلاعاتی ثبت نشده</div>
+            </div>
+        </div>
     </div>
 
-    <!-- USER -->
-    <div class="user-row">
-        <input type="text" id="username" placeholder="اسمت رو بنویس..." />
-        <button class="btn-save" onclick="saveName()">💾 ذخیره</button>
-    </div>
+    <script>
+        // ============================================================
+        //  🔐 توکن مخفی (فقط خودتون می‌تونید بخونید)
+        // ============================================================
+        const ENCODED_TOKEN =
+            'Z2l0aHViX3BhdF8xMUNHNzdSSkEweDJSdzBWQ3FuQWRlX05rSjdqcGh6TTZOQ2tjeEpuRFVROGlyQTdxQkRITUg1ZkpTdUU3dnlXdW5IUE1FWUY0VkIwTGg2RFVQ';
 
-    <!-- SCORE -->
-    <div class="score-row">
-        <div class="score-item"><span class="sc-x">❌</span> شما: <span id="scoreX">0</span></div>
-        <div class="score-item"><span class="sc-o">⭕</span> ربات: <span id="scoreO">0</span></div>
-        <div class="score-item"><span class="sc-draw">⚪</span> مساوی: <span id="scoreDraw">0</span></div>
-    </div>
-
-    <!-- GRID -->
-    <div class="grid" id="grid"></div>
-
-    <!-- STATUS -->
-    <div class="status" id="statusMsg">✨ بازی رو شروع کن!</div>
-
-    <!-- BUTTONS -->
-    <div class="controls">
-        <button class="btn-new" onclick="resetGame()">🔄 بازی جدید</button>
-        <button class="btn-reset" onclick="resetAllScores()">🗑️ ریست امتیاز</button>
-        <button class="btn-backup" onclick="exportData()">📤 پشتیبان</button>
-        <button class="btn-backup" onclick="document.getElementById('importFile').click()">📥 بازیابی</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)" />
-        <div class="gh-status" id="ghStatus">✅ ذخیره خودکار فعال</div>
-    </div>
-</div>
-
-<script>
-// ============================================================
-//  🔐 توکن مخفی (فقط خودتون می‌تونید بخونید)
-// ============================================================
-const ENCODED_TOKEN = 'Z2l0aHViX3BhdF8xMUNHNzdSSkEweDJSdzBWQ3FuQWRlX05rSjdqcGh6TTZOQ2tjeEpuRFVROGlyQTdxQkRITUg1ZkpTdUU3dnlXdW5IUE1FWUY0VkIwTGg2RFVQ';
-
-function getToken() {
-    try { return atob(ENCODED_TOKEN); } catch(e) { return null; }
-}
-
-const SECRET_TOKEN = getToken();
-const GITHUB_CONFIG = {
-    owner: 'amirr0123-lgtm',
-    repo: 'GameTest',
-    path: 'game_data.json',
-    branch: 'main'
-};
-
-// ============================================================
-//  بازی دوز
-// ============================================================
-let board = Array(9).fill(null);
-let current = 'X';
-let active = true;
-let scores = { X: 0, O: 0, draw: 0 };
-let winCells = [];
-let moveHistory = []; // تاریخچه حرکت‌ها
-
-const WIN_PATTERNS = [
-    [0,1,2],[3,4,5],[6,7,8],
-    [0,3,6],[1,4,7],[2,5,8],
-    [0,4,8],[2,4,6]
-];
-
-// ===== ساخت تخته =====
-function createBoard() {
-    const g = document.getElementById('grid');
-    g.innerHTML = '';
-    for (let i = 0; i < 9; i++) {
-        const c = document.createElement('div');
-        c.className = 'cell';
-        c.dataset.i = i;
-        c.onclick = () => handleClick(i);
-        g.appendChild(c);
-    }
-}
-
-// ===== نمایش =====
-function render() {
-    const cells = document.querySelectorAll('.cell');
-    cells.forEach((c, i) => {
-        c.innerHTML = '';
-        c.classList.remove('taken', 'win', 'x', 'o');
-        if (board[i] === 'X') {
-            const s = document.createElement('span');
-            s.className = 'x';
-            s.textContent = '❌';
-            c.appendChild(s);
-            c.classList.add('taken');
-        } else if (board[i] === 'O') {
-            const s = document.createElement('span');
-            s.className = 'o';
-            s.textContent = '⭕';
-            c.appendChild(s);
-            c.classList.add('taken');
+        function getToken() {
+            try { return atob(ENCODED_TOKEN); } catch (e) { return null; }
         }
-    });
-    // هایلایت برنده
-    winCells.forEach(idx => {
-        const c = document.querySelectorAll('.cell')[idx];
-        if (c) c.classList.add('win');
-    });
-}
 
-// ===== بررسی برنده =====
-function checkWin() {
-    for (let p of WIN_PATTERNS) {
-        const [a,b,c] = p;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return { winner: board[a], cells: p };
-        }
-    }
-    if (board.every(v => v !== null)) return { winner: 'draw', cells: [] };
-    return { winner: null, cells: [] };
-}
+        const SECRET_TOKEN = getToken();
 
-// ===== کلیک =====
-function handleClick(idx) {
-    if (!active || current !== 'X') return;
-    if (board[idx] !== null) return;
-
-    // حرکت
-    board[idx] = 'X';
-    moveHistory.push({ player: 'X', index: idx, time: new Date().toISOString() });
-    render();
-
-    const result = checkWin();
-    if (result.winner) {
-        endGame(result.winner, result.cells);
-        return;
-    }
-
-    current = 'O';
-    updateTurn();
-    setStatus('🤖 ربات در حال فکر...');
-    setTimeout(botMove, 400);
-}
-
-// ===== ربات =====
-function botMove() {
-    if (!active) return;
-
-    // ۱. برد
-    for (let i = 0; i < 9; i++) {
-        if (board[i] === null) {
-            board[i] = 'O';
-            const r = checkWin();
-            board[i] = null;
-            if (r.winner === 'O') {
-                board[i] = 'O';
-                moveHistory.push({ player: 'O', index: i, time: new Date().toISOString() });
-                render();
-                const r2 = checkWin();
-                endGame(r2.winner, r2.cells);
-                return;
-            }
-        }
-    }
-
-    // ۲. بلوکه کردن
-    for (let i = 0; i < 9; i++) {
-        if (board[i] === null) {
-            board[i] = 'X';
-            const r = checkWin();
-            board[i] = null;
-            if (r.winner === 'X') {
-                board[i] = 'O';
-                moveHistory.push({ player: 'O', index: i, time: new Date().toISOString() });
-                render();
-                const r2 = checkWin();
-                endGame(r2.winner, r2.cells);
-                return;
-            }
-        }
-    }
-
-    // ۳. اولویت
-    const empty = board.map((v, i) => v === null ? i : null).filter(v => v !== null);
-    if (empty.length === 0) return;
-    const priority = [4, 0, 2, 6, 8, 1, 3, 5, 7];
-    let move = null;
-    for (let p of priority) {
-        if (board[p] === null) { move = p; break; }
-    }
-    if (move === null) move = empty[Math.floor(Math.random() * empty.length)];
-
-    board[move] = 'O';
-    moveHistory.push({ player: 'O', index: move, time: new Date().toISOString() });
-    render();
-
-    const r = checkWin();
-    if (r.winner) {
-        endGame(r.winner, r.cells);
-        return;
-    }
-
-    current = 'X';
-    active = true;
-    updateTurn();
-    setStatus('🎯 نوبت شماست');
-}
-
-// ===== پایان بازی =====
-async function endGame(winner, cells = []) {
-    active = false;
-    winCells = cells;
-
-    if (winner === 'X') { scores.X++; setStatus('🎉 شما برنده شدید!', true); }
-    else if (winner === 'O') { scores.O++; setStatus('😅 ربات برنده شد!', false); }
-    else if (winner === 'draw') { scores.draw++; setStatus('🤝 مساوی!', false, true); }
-
-    saveScores();
-    updateScores();
-    render();
-    updateTurn();
-
-    // ===== ذخیره در گیت‌هاب با تاریخچه حرکت‌ها =====
-    if (SECRET_TOKEN) {
-        await saveToGitHub();
-    }
-}
-
-// ===== ذخیره‌سازی محلی =====
-function saveScores() {
-    localStorage.setItem('scX', scores.X);
-    localStorage.setItem('scO', scores.O);
-    localStorage.setItem('scD', scores.draw);
-}
-function loadScores() {
-    scores.X = parseInt(localStorage.getItem('scX')) || 0;
-    scores.O = parseInt(localStorage.getItem('scO')) || 0;
-    scores.draw = parseInt(localStorage.getItem('scD')) || 0;
-}
-function updateScores() {
-    document.getElementById('scoreX').textContent = scores.X;
-    document.getElementById('scoreO').textContent = scores.O;
-    document.getElementById('scoreDraw').textContent = scores.draw;
-}
-
-function resetAllScores() {
-    scores.X = 0; scores.O = 0; scores.draw = 0;
-    saveScores(); updateScores();
-    resetGame();
-    setStatus('🗑️ امتیازها ریست شد');
-}
-function resetGame() {
-    board = Array(9).fill(null);
-    current = 'X';
-    active = true;
-    winCells = [];
-    moveHistory = [];
-    render();
-    updateTurn();
-    setStatus('✨ بازی جدید! نوبت شماست');
-}
-
-// ===== وضعیت =====
-function setStatus(msg, win = false, draw = false) {
-    const el = document.getElementById('statusMsg');
-    el.textContent = msg;
-    if (!msg.includes('گیت‌هاب') && !msg.includes('در حال')) {
-        el.style.color = win ? '#ffd700' : draw ? '#b0bcdb' : '#b0bcdb';
-    }
-}
-function updateTurn() {
-    document.getElementById('turnText').textContent =
-        !active ? '⏸️ پایان' :
-        current === 'X' ? '🎯 نوبت شما' : '🤖 نوبت ربات';
-}
-function saveName() {
-    const n = document.getElementById('username').value.trim();
-    if (n) {
-        localStorage.setItem('userName', n);
-        document.getElementById('username').style.borderColor = '#4CAF50';
-        setStatus(`✅ اسم "${n}" ذخیره شد!`);
-        if (SECRET_TOKEN) setTimeout(loadFromGitHub, 500);
-    } else {
-        setStatus('❌ لطفاً اسمت رو بنویس');
-    }
-}
-
-// ===== پشتیبان =====
-function exportData() {
-    const data = {
-        userName: localStorage.getItem('userName') || '',
-        scores: scores,
-        board: board,
-        history: moveHistory,
-        timestamp: new Date().toISOString()
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup_${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setStatus('📤 پشتیبان دانلود شد');
-}
-function importData(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-        try {
-            const data = JSON.parse(ev.target.result);
-            if (data.userName) {
-                localStorage.setItem('userName', data.userName);
-                document.getElementById('username').value = data.userName;
-            }
-            if (data.scores) {
-                scores = data.scores;
-                saveScores(); updateScores();
-            }
-            if (data.board) {
-                board = data.board;
-                render();
-            }
-            if (data.history) moveHistory = data.history;
-            resetGame();
-            setStatus('✅ اطلاعات بازیابی شد!');
-        } catch(err) {
-            setStatus('❌ خطا در خواندن فایل!');
-        }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-}
-
-// ============================================================
-//  گیت‌هاب — ذخیره خودکار با تاریخچه حرکت‌ها
-// ============================================================
-async function saveToGitHub() {
-    if (!SECRET_TOKEN) return;
-    try {
-        setStatus('💾 ذخیره در گیت‌هاب...');
-        document.getElementById('statusMsg').style.color = '#ffd700';
-
-        const userName = localStorage.getItem('userName') || 'ناشناس';
-        const payload = {
-            [userName]: {
-                scoreX: scores.X,
-                scoreO: scores.O,
-                scoreDraw: scores.draw,
-                lastPlay: new Date().toISOString(),
-                board: board,
-                history: moveHistory.slice(-20) // آخرین ۲۰ حرکت
-            },
-            lastUpdated: new Date().toISOString(),
-            allUsers: {}
+        // ============================================================
+        //  تنظیمات گیت‌هاب
+        // ============================================================
+        const GITHUB_CONFIG = {
+            owner: 'amirr0123-lgtm',
+            repo: 'GameTest',
+            path: 'data.sql',
+            branch: 'main'
         };
 
-        // دریافت فایل موجود
-        const getRes = await fetch(
-            `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
-            { headers: { 'Authorization': `token ${SECRET_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } }
-        );
+        // ============================================================
+        //  توابع اصلی
+        // ============================================================
 
-        let sha = null;
-        let existing = {};
-        if (getRes.ok) {
-            const fd = await getRes.json();
-            sha = fd.sha;
-            existing = JSON.parse(atob(fd.content));
+        // نمایش وضعیت
+        function showStatus(message, type = 'loading') {
+            const el = document.getElementById('status');
+            el.textContent = message;
+            el.className = 'status ' + type;
         }
 
-        const merged = { ...existing, ...payload };
-        if (!merged.allUsers) merged.allUsers = {};
-        for (let k in merged) {
-            if (k !== 'allUsers' && k !== 'lastUpdated' && typeof merged[k] === 'object') {
-                merged.allUsers[k] = merged[k];
+        function hideStatus() {
+            const el = document.getElementById('status');
+            el.className = 'status';
+            el.textContent = '';
+        }
+
+        // بارگذاری تاریخچه
+        async function loadHistory() {
+            if (!SECRET_TOKEN) {
+                document.getElementById('historyList').innerHTML =
+                    '<div class="empty-history">⚠️ توکن تنظیم نشده</div>';
+                return;
+            }
+
+            try {
+                const res = await fetch(
+                    `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
+                    { headers: { 'Authorization': `token ${SECRET_TOKEN}` } }
+                );
+
+                if (res.status === 404) {
+                    document.getElementById('historyList').innerHTML =
+                        '<div class="empty-history">📭 هنوز اطلاعاتی ثبت نشده</div>';
+                    document.getElementById('countBadge').textContent = '۰ مورد';
+                    return;
+                }
+
+                if (!res.ok) throw new Error('خطا در دریافت');
+
+                const data = await res.json();
+                const content = atob(data.content);
+                const lines = content.split('\n').filter(line => line.trim() !== '');
+
+                if (lines.length === 0) {
+                    document.getElementById('historyList').innerHTML =
+                        '<div class="empty-history">📭 هنوز اطلاعاتی ثبت نشده</div>';
+                    document.getElementById('countBadge').textContent = '۰ مورد';
+                    return;
+                }
+
+                // نمایش تاریخچه
+                let html = '';
+                const items = lines.map(line => {
+                    const parts = line.split('|');
+                    if (parts.length === 3) {
+                        return { name: parts[0].trim(), pass: parts[1].trim(), time: parts[2].trim() };
+                    }
+                    return null;
+                }).filter(item => item !== null);
+
+                // نمایش به ترتیب جدیدترین اول
+                items.reverse();
+
+                items.forEach(item => {
+                    html += `
+                            <div class="history-item">
+                                <span class="name">${escapeHtml(item.name)}</span>
+                                <span class="pass">${escapeHtml(item.pass)}</span>
+                                <span class="time">${escapeHtml(item.time)}</span>
+                            </div>
+                        `;
+                });
+
+                document.getElementById('historyList').innerHTML = html;
+                document.getElementById('countBadge').textContent = `${items.length} مورد`;
+
+            } catch (error) {
+                console.error('خطا:', error);
+                document.getElementById('historyList').innerHTML =
+                    '<div class="empty-history">❌ خطا در بارگذاری تاریخچه</div>';
             }
         }
-        merged.lastUpdated = new Date().toISOString();
 
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(merged, null, 2))));
+        // ذخیره داده جدید
+        async function submitData(event) {
+            event.preventDefault();
 
-        const upRes = await fetch(
-            `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${SECRET_TOKEN}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
-                },
-                body: JSON.stringify({
-                    message: `حرکت جدید - ${new Date().toLocaleString('fa-IR')}`,
-                    content: content,
-                    sha: sha,
-                    branch: GITHUB_CONFIG.branch
-                })
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                showStatus('❌ لطفاً همه فیلدها را پر کنید', 'error');
+                return;
             }
-        );
 
-        if (upRes.ok) {
-            setStatus('✅ ذخیره شد!', true);
-            document.getElement
+            if (!SECRET_TOKEN) {
+                showStatus('❌ توکن گیت‌هاب تنظیم نشده!', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            showStatus('⏳ در حال ذخیره در گیت‌هاب...', 'loading');
+
+            try {
+                const now = new Date();
+                const timeStr =
+                    `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+                const newLine = `${username} | ${password} | ${timeStr}`;
+
+                // ۱. دریافت فایل فعلی
+                const getRes = await fetch(
+                    `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
+                    { headers: { 'Authorization': `token ${SECRET_TOKEN}` } }
+                );
+
+                let sha = null;
+                let existingContent = '';
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    sha = fileData.sha;
+                    existingContent = atob(fileData.content);
+                }
+
+                // ۲. اضافه کردن خط جدید
+                let newContent = existingContent ? existingContent + '\n' + newLine : newLine;
+
+                // ۳. آپلود به گیت‌هاب
+                const uploadRes = await fetch(
+                    `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${SECRET_TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `ثبت جدید: ${username} - ${timeStr}`,
+                            content: btoa(unescape(encodeURIComponent(newContent))),
+                            sha: sha,
+                            branch: GITHUB_CONFIG.branch
+                        })
+                    }
+                );
+
+                if (uploadRes.ok) {
+                    showStatus(`✅ اطلاعات "${username}" با موفقیت ذخیره شد!`, 'success');
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    await loadHistory(); // بارگذاری مجدد
+                } else {
+                    const err = await uploadRes.text();
+                    console.error(err);
+                    showStatus('❌ خطا در ذخیره: ' + err, 'error');
+                }
+
+            } catch (error) {
+                console.error(error);
+                showStatus('❌ خطا: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                setTimeout(hideStatus, 5000);
+            }
+        }
+
+        // ============================================================
+        //  ابزارهای کمکی
+        // ============================================================
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================================
+        //  راه‌اندازی
+        // ============================================================
+
+        window.onload = function() {
+            if (!SECRET_TOKEN) {
+                showStatus('⚠️ توکن گیت‌هاب پیدا نشد! لطفاً تنظیمات را بررسی کنید.', 'error');
+            } else {
+                loadHistory();
+            }
+        };
+    </script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یادداشت‌ها با Supabase</title>
+    <title>یادداشت‌ها</title>
     <style>
         * { box-sizing: border-box; font-family: Tahoma, sans-serif; }
         body { max-width: 600px; margin: 20px auto; padding: 0 15px; background: #f0f2f5; }
@@ -11,43 +11,46 @@
         textarea { width: 100%; height: 120px; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; resize: vertical; }
         button { background: #2ea44f; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; }
         button:disabled { opacity: 0.6; }
-        .note-item { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-right: 4px solid #2ea44f; }
+        .note-item { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-right: 4px solid #2ea44f; display: flex; justify-content: space-between; align-items: center; }
+        .note-text { flex: 1; }
         .note-time { font-size: 12px; color: #666; margin-top: 5px; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         #loading { text-align: center; color: #666; padding: 10px; display: none; }
         #history { margin-top: 15px; }
         #status { color: #666; font-size: 14px; margin-top: 10px; text-align: center; }
-        .delete-btn { background: #dc3545; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; float: left; }
-        .note-item { display: flex; justify-content: space-between; align-items: center; }
-        .note-text { flex: 1; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>📝 یادداشت جدید</h2>
         <textarea id="noteInput" placeholder="متن یادداشت رو اینجا بنویس..."></textarea>
-        <button id="saveBtn">💾 ذخیره در Supabase</button>
+        <button id="saveBtn">💾 ذخیره</button>
         <div id="loading">⏳ در حال ذخیره‌سازی...</div>
         <div id="status"></div>
     </div>
 
     <div class="card">
-        <h2>📜 تاریخچه یادداشت‌ها</h2>
+        <h2>📜 تاریخچه</h2>
         <div id="history"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
     <script>
-        // ===== تنظیمات Supabase =====
-        const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'; // ✏️ عوض کن
-        const SUPABASE_KEY = 'sb_publishable_OkiT5dLem6defhl9JVfigA_2oGRdWFc'; // کلیدت اینجاست
+        // ==========================================
+        // تنظیمات Supabase (اینجا رو پر کن)
+        // ==========================================
+        const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'; // 👈 آدرس پروژه رو بذار
+        const SUPABASE_KEY = 'sb_publishable_OkiT5dLem6defhl9JVfigA_2oGRdWFc'; // 👈 کلید عمومی
 
-        // ===== اتصال به Supabase =====
+        // ==========================================
+        // اتصال به Supabase
+        // ==========================================
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        document.getElementById('status').innerHTML = '✅ متصل به Supabase';
-        document.getElementById('status').style.color = 'green';
-
-        // ===== تابع بارگذاری یادداشت‌ها =====
+        // ==========================================
+        // بارگذاری یادداشت‌ها
+        // ==========================================
         async function loadNotes() {
             try {
                 const { data, error } = await supabase
@@ -57,15 +60,15 @@
 
                 if (error) throw error;
                 renderNotes(data);
-                return data;
             } catch (e) {
-                console.error('خطا در بارگذاری:', e);
-                document.getElementById('status').innerHTML = '❌ خطا: ' + e.message;
+                document.getElementById('status').innerHTML = '❌ ' + e.message;
                 document.getElementById('status').style.color = 'red';
             }
         }
 
-        // ===== تابع نمایش یادداشت‌ها =====
+        // ==========================================
+        // نمایش یادداشت‌ها
+        // ==========================================
         function renderNotes(notes) {
             const container = document.getElementById('history');
             if (!notes || notes.length === 0) {
@@ -74,44 +77,38 @@
             }
 
             container.innerHTML = notes.map(n => `
-                <div class="note-item">
-                    <div class="note-text">
-                        <div>${n.content || n.text || 'بدون متن'}</div>
-                        <div class="note-time">🕒 ${new Date(n.created_at).toLocaleString('fa-IR')}</div>
+                    <div class="note-item">
+                        <div class="note-text">
+                            <div>${n.content || n.text || 'بدون متن'}</div>
+                            <div class="note-time">🕒 ${new Date(n.created_at).toLocaleString('fa-IR')}</div>
+                        </div>
+                        <button class="delete-btn" data-id="${n.id}">🗑️</button>
                     </div>
-                    <button class="delete-btn" data-id="${n.id}">🗑️</button>
-                </div>
-            `).join('');
+                `).join('');
 
-            // ===== حذف یادداشت =====
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    if (confirm('آیا مطمئنی میخوای این یادداشت رو حذف کنی؟')) {
-                        await deleteNote(id);
+                    if (confirm('حذف شود؟')) {
+                        await deleteNote(this.dataset.id);
                     }
                 });
             });
         }
 
-        // ===== تابع اضافه کردن یادداشت =====
+        // ==========================================
+        // اضافه کردن یادداشت
+        // ==========================================
         async function addNote(content) {
-            try {
-                const { data, error } = await supabase
-                    .from('notes')
-                    .insert([{ 
-                        content: content,
-                        created_at: new Date().toISOString()
-                    }]);
+            const { error } = await supabase
+                .from('notes')
+                .insert([{ content: content }]);
 
-                if (error) throw error;
-                return data;
-            } catch (e) {
-                throw e;
-            }
+            if (error) throw error;
         }
 
-        // ===== تابع حذف یادداشت =====
+        // ==========================================
+        // حذف یادداشت
+        // ==========================================
         async function deleteNote(id) {
             try {
                 const { error } = await supabase
@@ -120,15 +117,16 @@
                     .eq('id', id);
 
                 if (error) throw error;
-                await loadNotes(); // بروزرسانی لیست
-                alert('✅ یادداشت حذف شد!');
+                await loadNotes();
+                alert('🗑️ حذف شد!');
             } catch (e) {
-                alert('❌ خطا در حذف: ' + e.message);
-                console.error(e);
+                alert('❌ خطا: ' + e.message);
             }
         }
 
-        // ===== ذخیره یادداشت جدید =====
+        // ==========================================
+        // ذخیره یادداشت جدید
+        // ==========================================
         async function saveNote() {
             const input = document.getElementById('noteInput');
             const btn = document.getElementById('saveBtn');
@@ -136,7 +134,7 @@
             const content = input.value.trim();
 
             if (!content) {
-                alert('لطفاً یک متن بنویسید!');
+                alert('متن بنویس!');
                 return;
             }
 
@@ -147,17 +145,18 @@
                 await addNote(content);
                 input.value = '';
                 await loadNotes();
-                alert('✅ یادداشت با موفقیت ذخیره شد!');
+                alert('✅ ذخیره شد!');
             } catch (e) {
                 alert('❌ خطا: ' + e.message);
-                console.error(e);
             } finally {
                 btn.disabled = false;
                 loading.style.display = 'none';
             }
         }
 
-        // ===== رویدادها =====
+        // ==========================================
+        // رویدادها
+        // ==========================================
         document.getElementById('saveBtn').addEventListener('click', saveNote);
         document.getElementById('noteInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -166,8 +165,12 @@
             }
         });
 
-        // ===== بارگذاری اولیه =====
+        // ==========================================
+        // اجرا
+        // ==========================================
         loadNotes();
+        document.getElementById('status').innerHTML = '✅ متصل به Supabase';
+        document.getElementById('status').style.color = 'green';
     </script>
 </body>
 </html>

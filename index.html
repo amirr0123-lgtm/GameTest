@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 بازی دوز حرفه‌ای</title>
+    
+    <style>
+        /* ==========================================
+           CSS - تمام استایل‌ها در اینجا
+           ========================================== */
+        
+        /* ===== تنظیمات کلی ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ===== هدر ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .turn-indicator {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: #d6d0f0;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===== بخش کاربر ===== */
+        .user-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .user-section input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .user-section input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .user-section input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-save {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-save:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== امتیازات ===== */
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .score-item {
+            color: #c8c2e6;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .score-item span {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .x-color {
+            color: #f7c948;
+        }
+
+        .o-color {
+            color: #5baaff;
+        }
+
+        /* ===== تخته بازی ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            aspect-ratio: 1;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+            user-select: none;
+        }
+
+        .cell:active {
+            transform: scale(0.95);
+        }
+
+        .cell.taken {
+            cursor: default;
+        }
+
+        .cell.win-highlight {
+            animation: winPulse 0.8s infinite alternate;
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes winPulse {
+            0% { transform: scale(1); background: rgba(255, 215, 0, 0.1); }
+            100% { transform: scale(1.05); background: rgba(255, 215, 0, 0.25); }
+        }
+
+        .cell .x-marker {
+            color: #f7c948;
+            filter: drop-shadow(0 0 20px #f7c94855);
+            animation: popIn 0.25s ease;
+        }
+
+        .cell .o-marker {
+            color: #5baaff;
+            filter: drop-shadow(0 0 20px #5baaff55);
+            animation: popIn 0.25s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* ===== وضعیت ===== */
+        .status {
+            text-align: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            color: #b3abdd;
+            font-size: 16px;
+            margin-bottom: 20px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* ===== دکمه‌ها ===== */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .controls button {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .controls button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-new {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+            grid-column: 1 / -1;
+        }
+
+        .btn-reset {
+            background: rgba(255, 80, 80, 0.2);
+            border: 1px solid rgba(255, 80, 80, 0.2);
+            color: #ff9e9e;
+        }
+
+        .btn-backup {
+            background: rgba(100, 200, 255, 0.1);
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            color: #8ac4ff;
+        }
+
+        /* ===== ریسپانسیو ===== */
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .cell {
+                font-size: 45px;
+                border-radius: 14px;
+            }
+            
+            .grid {
+                gap: 10px;
+            }
+            
+            .score-item {
+                font-size: 13px;
+            }
+            
+            .score-item span {
+                font-size: 17px;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .btn-new {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .cell {
+                font-size: 35px;
+                border-radius: 12px;
+            }
+            
+            .grid {
+                gap: 8px;
+            }
+            
+            .user-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- هدر -->
+        <div class="header">
+            <h1>🎮 بازی دوز</h1>
+            <div class="turn-indicator" id="turnIndicator">
+                <span id="turnText">نوبت شما</span>
+            </div>
+        </div>
+
+        <!-- بخش کاربر -->
+        <div class="user-section">
+            <input type="text" id="username" placeholder="اسمت رو بنویس..." />
+            <button onclick="saveName()" class="btn-save">💾 ذخیره</button>
+        </div>
+
+        <!-- امتیازات -->
+        <div class="score-board">
+            <div class="score-item">
+                <span class="x-color">❌</span> شما: <span id="scoreX">0</span>
+            </div>
+            <div class="score-item">
+                <span class="o-color">⭕</span> ربات: <span id="scoreO">0</span>
+            </div>
+            <div class="score-item">
+                🤝 مساوی: <span id="scoreDraw">0</span>
+            </div>
+        </div>
+
+        <!-- تخته بازی -->
+        <div class="grid" id="grid"></div>
+
+        <!-- وضعیت -->
+        <div class="status" id="statusMessage">✨ بازی رو شروع کن!</div>
+
+        <!-- دکمه‌ها -->
+        <div class="controls">
+            <button onclick="resetGame()" class="btn-new">🔄 بازی جدید</button>
+            <button onclick="resetAllScores()" class="btn-reset">🗑️ ریست امتیاز</button>
+            <button onclick="exportData()" class="btn-backup">📤 پشتیبان</button>
+            <button onclick="document.getElementById('importFile').click()" class="btn-backup">📥 بازیابی</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)" />
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // JAVASCRIPT - تمام کدها در اینجا
+        // ==========================================
+
+        // ==========================================
+        // بخش ۱: مدیریت کاربر و ذخیره‌سازی محلی
+        // ==========================================
+
+        // ذخیره اسم کاربر
+        function saveName() {
+            const name = document.getElementById('username').value.trim();
+            if (name) {
+                localStorage.setItem('userName', name);
+                document.getElementById('username').style.borderColor = '#4CAF50';
+                updateStatus(`✅ اسم "${name}" ذخیره شد!`);
+            } else {
+                updateStatus('❌ لطفاً اسمت رو بنویس');
+            }
+        }
+
+        // ==========================================
+        // بخش ۲: بازی دوز
+        // ==========================================
+
+        let board = Array(9).fill(null);
+        let currentPlayer = 'X';
+        let gameActive = true;
+        let scores = { X: 0, O: 0, draw: 0 };
+        let winCells = [];
+
+        // الگوهای برنده
+        const WIN_PATTERNS = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ];
+
+        // ساخت تخته
+        function createBoard() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i;
+                cell.onclick = () => handleCellClick(i);
+                grid.appendChild(cell);
+            }
+        }
+
+        // نمایش تخته
+        function renderBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, i) => {
+                cell.innerHTML = '';
+                cell.classList.remove('taken', 'win-highlight', 'x-marker', 'o-marker');
+                
+                if (board[i] === 'X') {
+                    const span = document.createElement('span');
+                    span.className = 'x-marker';
+                    span.textContent = '❌';
+                    cell.appendChild(span);
+                    cell.classList.add('taken');
+                } else if (board[i] === 'O') {
+                    const span = document.createElement('span');
+                    span.className = 'o-marker';
+                    span.textContent = '⭕';
+                    cell.appendChild(span);
+                    cell.classList.add('taken');
+                }
+            });
+            
+            // هایلایت برنده
+            if (winCells.length > 0) {
+                winCells.forEach(idx => {
+                    const cell = document.querySelectorAll('.cell')[idx];
+                    if (cell) cell.classList.add('win-highlight');
+                });
+            }
+        }
+
+        // بررسی برنده
+        function checkWinner() {
+            for (let pattern of WIN_PATTERNS) {
+                const [a, b, c] = pattern;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return { winner: board[a], cells: pattern };
+                }
+            }
+            if (board.every(cell => cell !== null)) {
+                return { winner: 'draw', cells: [] };
+            }
+            return { winner: null, cells: [] };
+        }
+
+        // کلیک روی خانه
+        function handleCellClick(index) {
+            if (!gameActive || currentPlayer !== 'X') return;
+            if (board[index] !== null) return;
+            
+            // حرکت بازیکن
+            board[index] = 'X';
+            renderBoard();
+            
+            const result = checkWinner();
+            if (result.winner) {
+                endGame(result.winner, result.cells);
+                return;
+            }
+            
+            // نوبت ربات
+            currentPlayer = 'O';
+            updateTurnIndicator();
+            updateStatus('🤖 ربات در حال فکر کردن...');
+            
+            setTimeout(botMove, 500);
+        }
+
+        // حرکت ربات
+        function botMove() {
+            if (!gameActive) return;
+            
+            // 1. برد اگر امکان داشته باشه
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === null) {
+                    board[i] = 'O';
+                    const result = checkWinner();
+                    board[i] = null;
+                    if (result.winner === 'O') {
+                        board[i] = 'O';
+                        renderBoard();
+                        const result2 = checkWinner();
+                        endGame(result2.winner, result2.cells);
+                        return;
+                    }
+                }
+            }
+            
+            // 2. جلوگیری از برد بازیکن
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === null) {
+                    board[i] = 'X';
+                    const result = checkWinner();
+                    board[i] = null;
+                    if (result.winner === 'X') {
+                        board[i] = 'O';
+                        renderBoard();
+                        const result2 = checkWinner();
+                        endGame(result2.winner, result2.cells);
+                        return;
+                    }
+                }
+            }
+            
+            // 3. حرکت هوشمندانه
+            const empty = board.map((v, i) => v === null ? i : null).filter(v => v !== null);
+            if (empty.length === 0) return;
+            
+            // اولویت: مرکز > گوشه‌ها > بقیه
+            const priority = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+            let move = null;
+            for (let p of priority) {
+                if (board[p] === null) {
+                    move = p;
+                    break;
+                }
+            }
+            
+            if (move === null) {
+                move = empty[Math.floor(Math.random() * empty.length)];
+            }
+            
+            board[move] = 'O';
+            renderBoard();
+            
+            const result = checkWinner();
+            if (result.winner) {
+                endGame(result.winner, result.cells);
+                return;
+            }
+            
+            currentPlayer = 'X';
+            gameActive = true;
+            updateTurnIndicator();
+            updateStatus('🎯 نوبت شماست');
+        }
+
+        // پایان بازی
+        function endGame(winner, cells = []) {
+            gameActive = false;
+            winCells = cells;
+            
+            if (winner === 'X') {
+                scores.X++;
+                updateStatus('🎉 شما برنده شدید!', true);
+            } else if (winner === 'O') {
+                scores.O++;
+                updateStatus('😅 ربات برنده شد!', false);
+            } else if (winner === 'draw') {
+                scores.draw++;
+                updateStatus('🤝 بازی مساوی!', false, true);
+            }
+            
+            saveScores();
+            updateScores();
+            renderBoard();
+            updateTurnIndicator();
+        }
+
+        // ریست بازی
+        function resetGame() {
+            board = Array(9).fill(null);
+            currentPlayer = 'X';
+            gameActive = true;
+            winCells = [];
+            renderBoard();
+            updateTurnIndicator();
+            updateStatus('✨ بازی جدید! نوبت شماست');
+        }
+
+        // ==========================================
+        // بخش ۳: مدیریت امتیازات
+        // ==========================================
+
+        function saveScores() {
+            localStorage.setItem('scoreX', scores.X);
+            localStorage.setItem('scoreO', scores.O);
+            localStorage.setItem('scoreDraw', scores.draw);
+        }
+
+        function loadScores() {
+            scores.X = parseInt(localStorage.getItem('scoreX')) || 0;
+            scores.O = parseInt(localStorage.getItem('scoreO')) || 0;
+            scores.draw = parseInt(localStorage.getItem('scoreDraw')) || 0;
+        }
+
+        function updateScores() {
+            document.getElementById('scoreX').textContent = scores.X;
+            document.getElementById('scoreO').textContent = scores.O;
+            document.getElementById('scoreDraw').textContent = scores.draw;
+        }
+
+        function resetAllScores() {
+            scores.X = 0;
+            scores.O = 0;
+            scores.draw = 0;
+            saveScores();
+            updateScores();
+            resetGame();
+            updateStatus('🗑️ امتیازها ریست شدند');
+        }
+
+        // ==========================================
+        // بخش ۴: پشتیبان‌گیری (Export/Import)
+        // ==========================================
+
+        function exportData() {
+            const allData = {
+                userName: localStorage.getItem('userName') || '',
+                scores: scores,
+                board: board,
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            updateStatus('📤 پشتیبان دانلود شد');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.userName) {
+                        localStorage.setItem('userName', data.userName);
+                        document.getElementById('username').value = data.userName;
+                    }
+                    
+                    if (data.scores) {
+                        scores = data.scores;
+                        saveScores();
+                        updateScores();
+                    }
+                    
+                    if (data.board)

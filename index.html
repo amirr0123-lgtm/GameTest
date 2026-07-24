@@ -149,8 +149,8 @@
         }
         .token-status {
             text-align: center;
-            padding: 8px;
-            margin-top: 10px;
+            padding: 10px;
+            margin-top: 12px;
             border-radius: 10px;
             font-size: 13px;
             background: rgba(255, 255, 255, 0.03);
@@ -204,55 +204,31 @@
         // ============================================================
         // 🔐 توکن مخفی (فقط شما می‌تونید بخونید!)
         // ============================================================
-        // 
-        // توکن اصلی شما: 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
-        // 
+        // توکن جدید: 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
+        // رمزگذاری شده با Base64 + معکوس کردن برای مخفی‌سازی بیشتر
+        
         // روش مخفی‌سازی:
-        // 1. توکن با Base64 رمزگذاری شد
-        // 2. یک کلید مخفی (SECRET_KEY) به عنوان رمز عبور اضافه شد
-        // 3. ترکیب توکن و کلید مخفی، یک رشته بی‌معنی ساخته
-        // 4. فقط خودتون با دونستن SECRET_KEY می‌تونید توکن رو بازیابی کنید
-        // ============================================================
+        // 1. توکن اصلی: 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
+        // 2. معکوس شده: poskz3J60UxySyNIBYGem3NfSWSmpgeQ8Xju_phg
+        // 3. سپس Base64: cG9za3ozSjYwVXh5U3lOSUJZR2VtM05mU1dTbXBnZVE4WGp1X3BoZw==
+        
+        // این رشته ترکیبی از توکن معکوس + Base64 است
+        const ENCODED_TOKEN = 'cG9za3ozSjYwVXh5U3lOSUJZR2VtM05mU1dTbXBnZVE4WGp1X3BoZw==';
 
-        // این رشته به ظاهر بی‌معنی، ترکیبی از توکن و کلید مخفی است
-        const ENCODED_PARTS = [
-            'Z2hwX2JWS3dsWkM4',
-            'RElvWmhsdUU1RkUy',
-            'c1RPUVdUVE9EdzRP',
-            'aTJneA=='
-        ];
-
-        // کلید مخفی (فقط خودتون می‌دونید!)
-        const SECRET_KEY = 'amir2026';
-
-        // ============================================================
-        //  تابع بازیابی توکن (فقط با کلید مخفی)
-        // ============================================================
         function getToken() {
             try {
-                // ترکیب قطعات
-                const combined = ENCODED_PARTS.join('');
-                // دیکود Base64
-                const decoded = atob(combined);
-                // اگر توکن با کلید مخفی ترکیب شده بود، اینجا جدا می‌شه
-                // (در این نسخه ساده، فقط Base64 استفاده شده)
-                return decoded;
+                // 1. دیکود Base64
+                const decoded = atob(ENCODED_TOKEN);
+                // 2. معکوس کردن برای برگشت به توکن اصلی
+                return decoded.split('').reverse().join('');
             } catch(e) {
                 console.error('خطا در بازیابی توکن');
                 return null;
             }
         }
 
-        // ============================================================
-        //  راه‌اندازی توکن مخفی
-        // ============================================================
         const SECRET_TOKEN = getToken();
-
-        // تست توکن (فقط برای خودتون)
         console.log('🔐 توکن بارگذاری شد:', SECRET_TOKEN ? '✅ موفق' : '❌ خطا');
-        if (SECRET_TOKEN) {
-            console.log('📌 توکن:', SECRET_TOKEN.substring(0, 10) + '...');
-        }
 
         // ============================================================
         //  تنظیمات گیت‌هاب
@@ -283,10 +259,10 @@
         function updateTokenStatus() {
             const el = document.getElementById('tokenStatus');
             if (SECRET_TOKEN) {
-                el.textContent = '🔐 وضعیت: متصل به گیت‌هاب';
+                el.textContent = '🔐 وضعیت: متصل به گیت‌هاب ✅';
                 el.className = 'token-status active';
             } else {
-                el.textContent = '⚠️ وضعیت: توکن معتبر نیست';
+                el.textContent = '⚠️ وضعیت: خطا در اتصال';
                 el.className = 'token-status';
             }
         }

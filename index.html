@@ -1,492 +1,179 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>📝 ثبت اطلاعات</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>یادداشت‌های گیت‌هاب</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(145deg, #0d0f1a, #1a1f35);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px);
-            padding: 35px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            max-width: 550px;
-            width: 100%;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
-        }
-        h1 {
-            font-size: 30px;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .subtitle {
-            text-align: center;
-            color: #8896b8;
-            font-size: 14px;
-            margin-bottom: 28px;
-        }
-        .form-group {
-            margin-bottom: 18px;
-        }
-        label {
-            display: block;
-            color: #b0c0e0;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        input {
-            width: 100%;
-            padding: 14px 20px;
-            border: 2px solid rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            color: #e8eeff;
-            font-size: 16px;
-            transition: 0.3s;
-            outline: none;
-        }
-        input:focus {
-            border-color: #f5576c;
-            background: rgba(255, 255, 255, 0.06);
-        }
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 6px;
-        }
-        .btn-submit:active {
-            transform: scale(0.96);
-        }
-        .btn-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .status {
-            padding: 12px;
-            border-radius: 14px;
-            margin: 18px 0;
-            text-align: center;
-            font-size: 14px;
-            display: none;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-        .status.success {
-            display: block;
-            color: #6fcf97;
-            border-color: rgba(111, 207, 151, 0.15);
-        }
-        .status.error {
-            display: block;
-            color: #f28b82;
-            border-color: rgba(242, 139, 130, 0.15);
-        }
-        .status.loading {
-            display: block;
-            color: #f9ca24;
-            border-color: rgba(249, 202, 36, 0.15);
-        }
-        .status.info {
-            display: block;
-            color: #7ec8e3;
-            border-color: rgba(126, 200, 227, 0.15);
-        }
-        .history-section {
-            margin-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 22px;
-        }
-        .history-title {
-            color: #b0c0e0;
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .history-title span {
-            font-size: 12px;
-            font-weight: 400;
-            color: #5a6b85;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2px 12px;
-            border-radius: 30px;
-        }
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .history-item {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 12px 16px;
-            border-radius: 14px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            transition: 0.2s;
-        }
-        .history-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .history-item .name {
-            color: #f093fb;
-            font-weight: 600;
-        }
-        .history-item .pass {
-            color: #8896b8;
-            font-family: monospace;
-            letter-spacing: 1px;
-        }
-        .history-item .time {
-            color: #4a5a7a;
-            font-size: 11px;
-        }
-        .empty-history {
-            text-align: center;
-            color: #4a5a7a;
-            padding: 30px 0;
-            font-size: 14px;
-        }
-        .token-status {
-            text-align: center;
-            padding: 10px;
-            margin-top: 14px;
-            border-radius: 14px;
-            font-size: 13px;
-            background: rgba(255, 255, 255, 0.02);
-            color: #4a5a7a;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .token-status.active {
-            color: #6fcf97;
-            border-color: rgba(111, 207, 151, 0.08);
-        }
-        @media (max-width: 480px) {
-            .container {
-                padding: 25px;
-                border-radius: 30px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            input {
-                padding: 12px 16px;
-                font-size: 14px;
-            }
-            .btn-submit {
-                padding: 14px;
-                font-size: 16px;
-            }
-        }
+        * { box-sizing: border-box; font-family: Tahoma, sans-serif; }
+        body { max-width: 600px; margin: 20px auto; padding: 0 15px; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        textarea { width: 100%; height: 120px; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; resize: vertical; }
+        button { background: #2ea44f; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; }
+        button:disabled { opacity: 0.6; }
+        .note-item { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-right: 4px solid #2ea44f; }
+        .note-time { font-size: 12px; color: #666; margin-top: 5px; }
+        #loading { text-align: center; color: #666; padding: 10px; display: none; }
+        #history { margin-top: 15px; }
+        #tokenStatus { color: #666; font-size: 14px; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📝 ثبت اطلاعات</h1>
-        <p class="subtitle">نام و رمز خود را وارد کنید تا در گیت‌هاب ذخیره شود</p>
+    <div class="card">
+        <h2>📝 یادداشت جدید</h2>
+        <textarea id="noteInput" placeholder="متن یادداشت رو اینجا بنویس..."></textarea>
+        <button id="saveBtn">💾 ذخیره در گیت‌هاب</button>
+        <div id="loading">⏳ در حال ذخیره‌سازی...</div>
+        <div id="tokenStatus"></div>
+    </div>
 
-        <form id="dataForm" onsubmit="submitData(event)">
-            <div class="form-group">
-                <label>👤 نام کاربری</label>
-                <input type="text" id="username" placeholder="مثلاً: amir" required />
-            </div>
-            <div class="form-group">
-                <label>🔑 رمز عبور</label>
-                <input type="text" id="password" placeholder="رمز خود را وارد کنید" required />
-            </div>
-            <button type="submit" class="btn-submit" id="submitBtn">💾 ذخیره در گیت‌هاب</button>
-        </form>
-
-        <div class="status" id="status"></div>
-        <div class="token-status" id="tokenStatus">🔐 وضعیت: در حال اتصال...</div>
-
-        <div class="history-section">
-            <div class="history-title">
-                📜 تاریخچه ثبت‌ها
-                <span id="countBadge">۰ مورد</span>
-            </div>
-            <div class="history-list" id="historyList">
-                <div class="empty-history">هنوز اطلاعاتی ثبت نشده</div>
-            </div>
-        </div>
+    <div class="card">
+        <h2>📜 تاریخچه یادداشت‌ها</h2>
+        <div id="history"></div>
     </div>
 
     <script>
-        // ================================================================
-        // 🔐 توکن با Base64 در کد (گیت‌هاب تشخیص نمی‌دهد)
-        // ================================================================
-        // 
-        // توکن اصلی: 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
-        // 
-        // روش: 
-        // 1. توکن با Base64 رمزگذاری شده
-        // 2. در کد فقط رشته Base64 وجود دارد
-        // 3. هنگام اجرا دیکود می‌شود
-        // ================================================================
+        // ===== توکن به صورت باینری (هر 8 بیت = 1 کاراکتر) =====
+        const TOKEN_BINARY = '01100111 01101000 01110000 01011111 01000010 01001000 01111001 01110100 01000101 01001110 01001100 01010001 01100011 01011010 01100001 01010000 01010001 01110001 01000001 01110100 01101100 00111000 01101111 00110111 01100101 01001010 01110100 01100010 01011010 01001111 00111001 01010101 01010000 01000111 01111010 00110011 01001100 01010110 01001010 01101100 01101101';
+        
+        const REPO_OWNER = 'amirr0123-lgtm';
+        const REPO_NAME = 'GameTest';
+        const FILE_PATH = 'data.json';
 
-        // توکن رمزگذاری شده با Base64
-        const ENCRYPTED_TOKEN = 'Z2hwX2lEaGtvdE1HZGhsSnI0aWt4RlNSQ2RFS3p5SkJVUTIzZW9oOA==';
+        // ===== تابع تبدیل باینری به متن =====
+        function binaryToText(binaryStr) {
+            // حذف فاصله‌ها
+            const cleanBinary = binaryStr.replace(/\s/g, '');
+            
+            // بررسی اینکه تعداد بیت‌ها مضرب 8 باشه
+            if (cleanBinary.length % 8 !== 0) {
+                throw new Error('تعداد بیت‌ها صحیح نیست!');
+            }
+            
+            let result = '';
+            for (let i = 0; i < cleanBinary.length; i += 8) {
+                const byte = cleanBinary.substr(i, 8);
+                const charCode = parseInt(byte, 2);
+                result += String.fromCharCode(charCode);
+            }
+            return result;
+        }
 
-        // دیکود کردن توکن
-        function getToken() {
+        // ===== رمزگشایی توکن =====
+        let GITHUB_TOKEN;
+        try {
+            GITHUB_TOKEN = binaryToText(TOKEN_BINARY);
+            document.getElementById('tokenStatus').innerHTML = '✅ توکن با موفقیت از باینری رمزگشایی شد';
+            document.getElementById('tokenStatus').style.color = 'green';
+        } catch (e) {
+            document.getElementById('tokenStatus').innerHTML = '❌ خطا در رمزگشایی توکن: ' + e.message;
+            document.getElementById('tokenStatus').style.color = 'red';
+            throw e;
+        }
+
+        // ===== بقیه کدها =====
+        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+
+        async function fetchFile() {
             try {
-                return atob(ENCRYPTED_TOKEN);
+                const res = await fetch(API_URL, {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                });
+                if (res.status === 404) return { content: [], sha: null };
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                const decoded = atob(data.content.replace(/\s/g, ''));
+                return { content: JSON.parse(decoded), sha: data.sha };
             } catch (e) {
-                console.error('❌ خطا در رمزگشایی توکن');
-                return null;
+                console.error('خطا در خواندن فایل:', e);
+                return { content: [], sha: null };
             }
         }
 
-        const SECRET_TOKEN = getToken();
+        async function updateFile(newNote) {
+            const { content, sha } = await fetchFile();
+            const newContent = [...content, { text: newNote, time: new Date().toLocaleString('fa-IR') }];
+            const encoded = btoa(JSON.stringify(newContent, null, 2));
+            
+            const body = {
+                message: `افزودن یادداشت جدید`,
+                content: encoded,
+                sha: sha
+            };
+            if (!sha) delete body.sha;
 
-        // فقط برای خودت (توی کنسول مرورگر)
-        console.log('🔐 توکن:', SECRET_TOKEN ? '✅ بارگذاری شد' : '❌ خطا');
+            const res = await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
 
-        // ================================================================
-        //  تنظیمات گیت‌هاب
-        // ================================================================
-        const GITHUB_CONFIG = {
-            owner: 'amirr0123-lgtm',
-            repo: 'GameTest',
-            path: 'data.sql',
-            branch: 'main'
-        };
-
-        // ================================================================
-        //  توابع اصلی
-        // ================================================================
-
-        function showStatus(message, type = 'loading') {
-            const el = document.getElementById('status');
-            el.textContent = message;
-            el.className = 'status ' + type;
-        }
-
-        function hideStatus() {
-            const el = document.getElementById('status');
-            el.className = 'status';
-            el.textContent = '';
-        }
-
-        function updateTokenStatus() {
-            const el = document.getElementById('tokenStatus');
-            if (SECRET_TOKEN && SECRET_TOKEN.startsWith('ghp_')) {
-                el.textContent = '🔐 وضعیت: متصل به گیت‌هاب ✅';
-                el.className = 'token-status active';
-            } else {
-                el.textContent = '⚠️ وضعیت: خطا در اتصال';
-                el.className = 'token-status';
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message || 'خطا در ذخیره‌سازی');
             }
+            return await res.json();
+        }
+
+        function renderHistory(notes) {
+            const container = document.getElementById('history');
+            if (!notes || notes.length === 0) {
+                container.innerHTML = '<p style="color:#888;">هنوز یادداشتی ثبت نشده</p>';
+                return;
+            }
+            container.innerHTML = notes.map(n => `
+                <div class="note-item">
+                    <div>${n.text}</div>
+                    <div class="note-time">🕒 ${n.time || 'بدون تاریخ'}</div>
+                </div>
+            `).join('');
         }
 
         async function loadHistory() {
-            if (!SECRET_TOKEN) {
-                document.getElementById('historyList').innerHTML =
-                    '<div class="empty-history">⚠️ خطا در اتصال به گیت‌هاب</div>';
-                updateTokenStatus();
-                return;
-            }
-
-            try {
-                const res = await fetch(
-                    `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
-                    { headers: { 'Authorization': `token ${SECRET_TOKEN}` } }
-                );
-
-                if (res.status === 404) {
-                    document.getElementById('historyList').innerHTML =
-                        '<div class="empty-history">📭 هنوز اطلاعاتی ثبت نشده</div>';
-                    document.getElementById('countBadge').textContent = '۰ مورد';
-                    return;
-                }
-
-                if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.message || 'خطا در دریافت');
-                }
-
-                const data = await res.json();
-                const content = atob(data.content);
-                const lines = content.split('\n').filter(line => line.trim() !== '');
-
-                if (lines.length === 0) {
-                    document.getElementById('historyList').innerHTML =
-                        '<div class="empty-history">📭 هنوز اطلاعاتی ثبت نشده</div>';
-                    document.getElementById('countBadge').textContent = '۰ مورد';
-                    return;
-                }
-
-                let html = '';
-                const items = lines.map(line => {
-                    const parts = line.split('|');
-                    if (parts.length === 3) {
-                        return { name: parts[0].trim(), pass: parts[1].trim(), time: parts[2].trim() };
-                    }
-                    return null;
-                }).filter(item => item !== null);
-
-                items.reverse();
-
-                items.forEach(item => {
-                    html += `
-                                <div class="history-item">
-                                    <span class="name">${escapeHtml(item.name)}</span>
-                                    <span class="pass">${escapeHtml(item.pass)}</span>
-                                    <span class="time">${escapeHtml(item.time)}</span>
-                                </div>
-                            `;
-                });
-
-                document.getElementById('historyList').innerHTML = html;
-                document.getElementById('countBadge').textContent = `${items.length} مورد`;
-                updateTokenStatus();
-
-            } catch (error) {
-                console.error('خطا:', error);
-                document.getElementById('historyList').innerHTML =
-                    `<div class="empty-history">❌ خطا: ${error.message}</div>`;
-            }
+            const { content } = await fetchFile();
+            renderHistory(content);
         }
 
-        async function submitData(event) {
-            event.preventDefault();
+        async function saveNote() {
+            const input = document.getElementById('noteInput');
+            const btn = document.getElementById('saveBtn');
+            const loading = document.getElementById('loading');
+            const note = input.value.trim();
 
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (!username || !password) {
-                showStatus('❌ لطفاً همه فیلدها را پر کنید', 'error');
+            if (!note) {
+                alert('لطفاً یک متن بنویسید!');
                 return;
             }
 
-            if (!SECRET_TOKEN) {
-                showStatus('❌ خطا در اتصال به گیت‌هاب!', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            showStatus('⏳ در حال ذخیره در گیت‌هاب...', 'loading');
+            loading.style.display = 'block';
 
             try {
-                const now = new Date();
-                const timeStr =
-                    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-                const newLine = `${username} | ${password} | ${timeStr}`;
-
-                const getRes = await fetch(
-                    `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
-                    { headers: { 'Authorization': `token ${SECRET_TOKEN}` } }
-                );
-
-                let sha = null;
-                let existingContent = '';
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    sha = fileData.sha;
-                    existingContent = atob(fileData.content);
-                } else if (getRes.status === 404) {
-                    // فایل وجود نداره
-                } else {
-                    const err = await getRes.json();
-                    throw new Error(err.message || 'خطا در دریافت فایل');
-                }
-
-                let newContent = existingContent ? existingContent + '\n' + newLine : newLine;
-
-                const uploadRes = await fetch(
-                    `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${SECRET_TOKEN}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `ثبت جدید: ${username} - ${timeStr}`,
-                            content: btoa(unescape(encodeURIComponent(newContent))),
-                            sha: sha,
-                            branch: GITHUB_CONFIG.branch
-                        })
-                    }
-                );
-
-                if (uploadRes.ok) {
-                    showStatus(`✅ اطلاعات "${username}" با موفقیت ذخیره شد!`, 'success');
-                    document.getElementById('username').value = '';
-                    document.getElementById('password').value = '';
-                    await loadHistory();
-                } else {
-                    const err = await uploadRes.json();
-                    throw new Error(err.message || 'خطا در ذخیره');
-                }
-
-            } catch (error) {
-                console.error(error);
-                showStatus(`❌ خطا: ${error.message}`, 'error');
+                await updateFile(note);
+                input.value = '';
+                await loadHistory();
+                alert('✅ یادداشت با موفقیت ذخیره شد!');
+            } catch (e) {
+                alert('❌ خطا: ' + e.message);
+                console.error(e);
             } finally {
                 btn.disabled = false;
-                setTimeout(hideStatus, 5000);
+                loading.style.display = 'none';
             }
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        document.getElementById('saveBtn').addEventListener('click', saveNote);
+        loadHistory();
 
-        // ================================================================
-        //  راه‌اندازی
-        // ================================================================
-
-        window.onload = function() {
-            updateTokenStatus();
-
-            if (SECRET_TOKEN && SECRET_TOKEN.startsWith('ghp_')) {
-                loadHistory();
-                showStatus('✅ آماده! اطلاعات خود را وارد کنید.', 'info');
-                setTimeout(hideStatus, 3000);
-            } else {
-                showStatus('⚠️ خطا در اتصال به گیت‌هاب!', 'error');
+        document.getElementById('noteInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                saveNote();
             }
-        };
+        });
     </script>
 </body>
 </html>

@@ -3,221 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ثبت‌نام موسیقی سنتی و کلاسیک</title>
+    <title>💬 چت عمومی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
     <style>
-        /* تمام استایل‌های قبلی را همان‌گونه که بود حفظ کنید */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Vazirmatn', sans-serif;
-            background: linear-gradient(135deg, #f5f0e8, #e8dccc);
+            background: linear-gradient(135deg, #e8f0fe, #d4e4f7);
             min-height: 100vh;
-            padding: 30px 15px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-        }
-        .container {
-            max-width: 900px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 40px;
-            padding: 35px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        h1 { text-align: center; color: #4a2c1e; font-weight: 700; font-size: 2rem; margin-bottom: 10px; }
-        .subtitle { text-align: center; color: #7a5a44; margin-bottom: 30px; border-bottom: 2px dashed #d4b8a0; padding-bottom: 15px; }
-        .form-group { margin-bottom: 18px; }
-        label { display: block; font-weight: 600; color: #3d2b1f; margin-bottom: 6px; font-size: 0.95rem; }
-        label .required { color: #b34a3c; margin-right: 4px; }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd0c4;
-            border-radius: 16px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            background: #fefcf9;
-            color: #2d1f15;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #b48a6e;
-            box-shadow: 0 0 0 4px rgba(180, 138, 110, 0.2);
-        }
-        textarea { min-height: 70px; resize: vertical; }
-        .row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-        .btn {
-            background: #8b6b51;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 6px 20px rgba(139, 107, 81, 0.3);
-            font-family: 'Vazirmatn', sans-serif;
-        }
-        .btn:hover { background: #6f523c; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(139, 107, 81, 0.4); }
-        .btn:active { transform: scale(0.97); }
-        .message {
-            padding: 12px 18px;
-            border-radius: 16px;
-            margin: 20px 0 10px;
-            display: none;
-            font-weight: 500;
-        }
-        .message.success { display: block; background: #e1f0e5; color: #1f6d4a; border-right: 6px solid #2b8f5e; }
-        .message.error { display: block; background: #fce8e6; color: #9e3c34; border-right: 6px solid #c74f44; }
-        .history-section { margin-top: 40px; border-top: 2px solid #ddd0c4; padding-top: 25px; }
-        .history-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            padding: 20px;
+        }
+        .chat-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.15);
+            border: 1px solid rgba7/29/2026 14:57:55	9 آذر 1406	1:27	سلام	هیهینینینیههین																					(255, 255, 255, 0.3);
+        }
+        .chat-header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #d4e0ed;
             margin-bottom: 20px;
         }
-        .history-header h2 { color: #4a2c1e; font-size: 1.4rem; }
-        .btn-small {
-            background: #b48a6e;
-            border: none;
-            padding: 8px 20px;
+        .chat-header h1 {
+            color: #1a3a5c;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .chat-header p {
+            color: #4a6a8a;
+            font-size: 0.9rem;
+        }
+        .login-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .login-section input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #c0d0e0;
             border-radius: 30px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+            background: #f8faff;
+        }
+        .login-section input:focus {
+            outline: none;
+            border-color: #4a8ab5;
+            box-shadow: 0 0 0 4px rgba(74, 138, 181, 0.1);
+        }
+        .login-section button {
+            padding: 12px 30px;
+            background: #1a5a7a;
             color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 0.9rem;
         }
-        .btn-small:hover { background: #8b6b51; transform: scale(1.03); }
-        .history-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 15px;
-            max-height: 450px;
-            overflow-y: auto;
-            padding: 5px 2px;
+        .login-section button:hover {
+            background: #0e3d5a;
+            transform: scale(1.02);
         }
-        .history-card {
-            background: #f8f3ed;
+        .chat-box {
+            background: #f2f7fc;
             border-radius: 20px;
-            padding: 16px;
-            border: 1px solid #e3d5c9;
-            transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            border: 1px solid #dce8f2;
         }
-        .history-card:hover { transform: translateY(-4px); border-color: #b48a6e; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-        .history-card .name { font-weight: 700; color: #3d2b1f; font-size: 1.05rem; }
-        .history-card .detail { font-size: 0.85rem; color: #6f5a48; margin-top: 6px; line-height: 1.6; }
-        .history-card .detail span {
-            display: inline-block;
-            background: #e8ddd2;
-            padding: 0 10px;
-            border-radius: 30px;
+        .message-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-right: 4px solid #4a8ab5;
+        }
+        .message-item .username {
+            font-weight: 700;
+            color: #1a3a5c;
+            font-size: 0.95rem;
+        }
+        .message-item .time {
+            float: left;
+            color: #7a8a9a;
             font-size: 0.75rem;
-            color: #4d3728;
-            margin-left: 4px;
+            background: #eef4f9;
+            padding: 2px 10px;
+            border-radius: 30px;
         }
-        .empty-history { text-align: center; color: #8f7a6a; padding: 30px 0; font-style: italic; grid-column: 1 / -1; }
-        #loading { text-align: center; color: #6f5a48; padding: 20px; display: none; }
-        @media (max-width: 650px) {
-            .row-2col { grid-template-columns: 1fr; gap: 0; }
-            .container { padding: 25px 15px; }
-            h1 { font-size: 1.6rem; }
+        .message-item .text {
+            margin-top: 6px;
+            color: #2a3a4a;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+        .message-item .date {
+            color: #7a8a9a;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+        .input-section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .input-section input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #c0d0e0;
+            border-radius: 30px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+            background: #f8faff;
+        }
+        .input-section input:focus {
+            outline: none;
+            border-color: #4a8ab5;
+            box-shadow: 0 0 0 4px rgba(74, 138, 181, 0.1);
+        }
+        .input-section button {
+            padding: 12px 30px;
+            background: #4a8ab5;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .input-section button:hover {
+            background: #2a6a8a;
+            transform: scale(1.02);
+        }
+        .input-section button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .status {
+            text-align: center;
+            color: #4a6a8a;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+        .empty-chat {
+            text-align: center;
+            color: #7a8a9a;
+            padding: 40px 0;
+        }
+        @media (max-width: 600px) {
+            .login-section, .input-section {
+                flex-direction: column;
+            }
+            .login-section button, .input-section button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎵 ثبت‌نام موسیقی</h1>
-        <div class="subtitle">سنتی · کلاسیک · انواع سازها</div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>💬 چت عمومی</h1>
+            <p>گفت‌وگوی آزاد و دوستانه</p>
+        </div>
 
-        <form id="registerForm">
-            <div class="form-group">
-                <label>نام و نام‌خانوادگی <span class="required">*</span></label>
-                <input type="text" id="fullName" placeholder="مثلاً: احمد رضایی" required>
+        <!-- بخش ورود / تعیین نام -->
+        <div id="loginArea" class="login-section">
+            <input type="text" id="usernameInput" placeholder="نام خود را وارد کنید..." maxlength="20">
+            <button id="loginBtn">✅ ورود به چت</button>
+        </div>
+
+        <!-- بخش چت (پس از ورود) -->
+        <div id="chatArea" style="display: none;">
+            <div class="chat-box" id="chatBox">
+                <div class="empty-chat">در حال بارگذاری پیام‌ها...</div>
             </div>
 
-            <div class="row-2col">
-                <div class="form-group">
-                    <label>شماره تماس <span class="required">*</span></label>
-                    <input type="tel" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required>
-                </div>
-                <div class="form-group">
-                    <label>ایمیل</label>
-                    <input type="email" id="email" placeholder="example@mail.com">
-                </div>
+            <div class="input-section">
+                <input type="text" id="messageInput" placeholder="پیام خود را بنویسید..." maxlength="500">
+                <button id="sendBtn">📤 ارسال</button>
             </div>
-
-            <div class="row-2col">
-                <div class="form-group">
-                    <label>نوع موسیقی <span class="required">*</span></label>
-                    <select id="musicType" required>
-                        <option value="">انتخاب کنید</option>
-                        <option value="سنتی">سنتی</option>
-                        <option value="کلاسیک">کلاسیک</option>
-                        <option value="هر دو">هر دو</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>ساز تخصصی <span class="required">*</span></label>
-                    <select id="instrument" required>
-                        <option value="">انتخاب کنید</option>
-                        <option value="تار">تار</option>
-                        <option value="سه‌تار">سه‌تار</option>
-                        <option value="نی">نی</option>
-                        <option value="کمانچه">کمانچه</option>
-                        <option value="عود">عود</option>
-                        <option value="تنبک">تنبک</option>
-                        <option value="دف">دف</option>
-                        <option value="ویولن">ویولن</option>
-                        <option value="پیانو">پیانو</option>
-                        <option value="ویولنسل">ویولنسل</option>
-                        <option value="فلوت">فلوت</option>
-                        <option value="ساز دیگر">ساز دیگر</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row-2col">
-                <div class="form-group">
-                    <label>سابقه (سال)</label>
-                    <input type="number" id="experience" placeholder="۰" min="0">
-                </div>
-                <div class="form-group">
-                    <label>نام استاد (اختیاری)</label>
-                    <input type="text" id="teacher" placeholder="نام استاد">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>هدف از آموزش</label>
-                <textarea id="goal" placeholder="مثلاً: اجرا در کنسرت، آموزش، تفریح..."></textarea>
-            </div>
-
-            <button type="submit" class="btn">✨ ثبت‌نام</button>
-        </form>
-
-        <div id="message" class="message"></div>
-
-        <div class="history-section">
-            <div class="history-header">
-                <h2>📋 تاریخچه ثبت‌نام‌ها</h2>
-                <button class="btn-small" id="refreshHistory">🔄 به‌روزرسانی</button>
-            </div>
-            <div id="loading">⏳ در حال بارگذاری...</div>
-            <div id="historyContainer" class="history-grid">
-                <div class="empty-history">هیچ ثبت‌نامی یافت نشد.</div>
-            </div>
+            <div class="status" id="status"></div>
         </div>
     </div>
 
@@ -226,134 +213,206 @@
         const DEPLOYMENT_ID = "AKfycbxrqOK0z97ZQmee7DEh0P5hWahw6VumgixKizSFV-8gZujQLceNTyn5cu6yY1q_d9A3";
         const SCRIPT_URL = `https://script.google.com/macros/s/${DEPLOYMENT_ID}/exec`;
 
-        const form = document.getElementById('registerForm');
-        const messageDiv = document.getElementById('message');
-        const historyContainer = document.getElementById('historyContainer');
-        const loadingDiv = document.getElementById('loading');
+        // عناصر DOM
+        const loginArea = document.getElementById('loginArea');
+        const chatArea = document.getElementById('chatArea');
+        const usernameInput = document.getElementById('usernameInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatBox = document.getElementById('chatBox');
+        const status = document.getElementById('status');
 
-        // --- ثبت‌نام جدید با استفاده از fetch و mode: no-cors ---
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            hideMessage();
+        let currentUsername = '';
+        let isLoading = false;
+        let loadInterval = null;
 
-            const data = {
-                fullName: document.getElementById('fullName').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                musicType: document.getElementById('musicType').value,
-                instrument: document.getElementById('instrument').value,
-                experience: document.getElementById('experience').value || '0',
-                teacher: document.getElementById('teacher').value.trim(),
-                goal: document.getElementById('goal').value.trim()
-            };
+        // --- ورود به چت ---
+        loginBtn.addEventListener('click', () => {
+            const name = usernameInput.value.trim();
+            if (!name) {
+                status.textContent = '⚠️ لطفاً نام خود را وارد کنید.';
+                return;
+            }
+            currentUsername = name;
+            loginArea.style.display = 'none';
+            chatArea.style.display = 'block';
+            status.textContent = `👤 خوش آمدید، ${currentUsername}!`;
+            
+            // ذخیره نام در localStorage
+            localStorage.setItem('chat_username', currentUsername);
+            
+            // بارگذاری پیام‌ها
+            loadMessages();
+            
+            // بارگذاری خودکار هر 3 ثانیه
+            if (loadInterval) clearInterval(loadInterval);
+            loadInterval = setInterval(loadMessages, 3000);
+        });
 
-            if (!data.fullName || !data.phone || !data.musicType || !data.instrument) {
-                showMessage('لطفاً تمام فیلدهای ضروری (دارای ستاره) را پر کنید.', 'error');
+        // با Enter در فیلد نام
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+
+        // --- ارسال پیام ---
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+            if (!currentUsername) {
+                status.textContent = '⚠️ ابتدا وارد شوید.';
                 return;
             }
 
-            try {
-                // استفاده از fetch با mode: 'no-cors' برای ارسال به Apps Script
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(data)
-                });
+            sendBtn.disabled = true;
+            status.textContent = '⏳ در حال ارسال...';
 
-                // به دلیل no-cors نمی‌توانیم پاسخ را بخوانیم، اما معمولاً درخواست به سرور می‌رسد.
-                showMessage('✅ ثبت‌نام شما با موفقیت انجام شد!', 'success');
-                form.reset();
-                // بارگذاری مجدد تاریخچه (با تاخیر کوتاه)
-                setTimeout(loadHistory, 1000);
+            const data = {
+                username: currentUsername,
+                message: text
+            };
 
-            } catch (error) {
-                showMessage('❌ خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.', 'error');
-                console.error('Fetch error:', error);
-            }
-        });
-
-        // --- دریافت تاریخچه با google.script.run (روش مطمئن‌تر) ---
-        function loadHistory() {
-            loadingDiv.style.display = 'block';
-            historyContainer.innerHTML = '';
-
-            // اگر در محیط Apps Script هستیم، از google.script.run استفاده کنیم
+            // استفاده از google.script.run (در محیط Apps Script)
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 google.script.run
-                    .withSuccessHandler(displayHistory)
-                    .withFailureHandler((err) => {
-                        displayError('خطا در دریافت تاریخچه: ' + err);
-                        loadingDiv.style.display = 'none';
+                    .withSuccessHandler((response) => {
+                        if (response.success) {
+                            messageInput.value = '';
+                            status.textContent = '✅ پیام ارسال شد!';
+                            loadMessages();
+                        } else {
+                            status.textContent = '❌ ' + response.message;
+                        }
+                        sendBtn.disabled = false;
                     })
-                    .getHistory();
+                    .withFailureHandler((error) => {
+                        status.textContent = '❌ خطا: ' + error;
+                        sendBtn.disabled = false;
+                    })
+                    .sendMessage(data);
             } else {
-                // در غیر این صورت (تست محلی) از fetch استفاده کنیم
-                fetch(`${SCRIPT_URL}?action=getHistory`)
-                    .then(response => response.json())
-                    .then(data => {
-                        displayHistory(data);
-                        loadingDiv.style.display = 'none';
+                // Fallback: استفاده از fetch
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                })
+                .then(() => {
+                    messageInput.value = '';
+                    status.textContent = '✅ پیام ارسال شد!';
+                    loadMessages();
+                    sendBtn.disabled = false;
+                })
+                .catch((error) => {
+                    status.textContent = '❌ خطا: ' + error;
+                    sendBtn.disabled = false;
+                });
+            }
+        }
+
+        // --- دریافت و نمایش پیام‌ها ---
+        function loadMessages() {
+            if (isLoading) return;
+            isLoading = true;
+
+            // ابتدا پیام "در حال بارگذاری..." را نمایش بده
+            if (chatBox.children.length === 0) {
+                chatBox.innerHTML = '<div class="empty-chat">⏳ در حال بارگذاری...</div>';
+            }
+
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run
+                    .withSuccessHandler((messages) => {
+                        displayMessages(messages);
+                        isLoading = false;
                     })
-                    .catch(err => {
-                        displayError('خطا در ارتباط با سرور');
-                        loadingDiv.style.display = 'none';
-                        console.error('Fetch history error:', err);
+                    .withFailureHandler((error) => {
+                        console.error('Error loading messages:', error);
+                        status.textContent = '❌ خطا در دریافت پیام‌ها: ' + error;
+                        chatBox.innerHTML = '<div class="empty-chat">❌ خطا در دریافت پیام‌ها</div>';
+                        isLoading = false;
+                    })
+                    .getChatHistory();
+            } else {
+                // Fallback: fetch
+                fetch(`${SCRIPT_URL}?action=getHistory`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(messages => {
+                        displayMessages(messages);
+                        isLoading = false;
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                        status.textContent = '❌ خطا در دریافت پیام‌ها';
+                        chatBox.innerHTML = '<div class="empty-chat">❌ خطا در دریافت پیام‌ها</div>';
+                        isLoading = false;
                     });
             }
         }
 
-        function displayHistory(data) {
-            historyContainer.innerHTML = '';
-            loadingDiv.style.display = 'none';
-
-            if (!data || data.length === 0) {
-                historyContainer.innerHTML = '<div class="empty-history">هیچ ثبت‌نامی یافت نشد.</div>';
+        function displayMessages(messages) {
+            chatBox.innerHTML = '';
+            
+            if (!messages || messages.length === 0) {
+                chatBox.innerHTML = '<div class="empty-chat">💬 پیامی وجود ندارد. اولین نفر باشید! 🎉</div>';
                 return;
             }
 
-            data.forEach(row => {
-                const card = document.createElement('div');
-                card.className = 'history-card';
-                card.innerHTML = `
-                    <div class="name">${row[1] || 'نامشخص'}</div>
-                    <div class="detail">
-                        <span>${row[4] || ''}</span> · ${row[5] || ''}
+            messages.forEach(msg => {
+                // ساختار: [تاریخ میلادی, تاریخ شمسی, ساعت, نام, پیام]
+                const date = msg[1] || 'تاریخ نامشخص';
+                const time = msg[2] || '';
+                const username = msg[3] || 'ناشناس';
+                const text = msg[4] || '';
+
+                const item = document.createElement('div');
+                item.className = 'message-item';
+                item.innerHTML = `
+                    <div>
+                        <span class="username">${escapeHtml(username)}</span>
+                        <span class="time">🕐 ${escapeHtml(time)}</span>
                     </div>
-                    <div class="detail">
-                        📞 ${row[2] || ''} ${row[3] ? '· ✉️ '+row[3] : ''}
-                    </div>
-                    <div class="detail" style="font-size:0.8rem; color:#8f7a6a;">
-                        ${row[0] ? new Date(row[0]).toLocaleDateString('fa-IR') : ''}
-                        ${row[6] ? '· '+row[6]+' سال' : ''}
-                    </div>
+                    <div class="text">${escapeHtml(text)}</div>
+                    <div class="date">📅 ${escapeHtml(date)}</div>
                 `;
-                historyContainer.appendChild(card);
+                chatBox.appendChild(item);
             });
+
+            // اسکرول به پایین
+            chatBox.scrollTop = chatBox.scrollHeight;
+            status.textContent = `✅ ${messages.length} پیام بارگذاری شد`;
         }
 
-        function displayError(msg) {
-            historyContainer.innerHTML = `<div class="empty-history">❌ ${msg}</div>`;
-            loadingDiv.style.display = 'none';
+        // تابع امنیتی برای جلوگیری از XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        function showMessage(text, type) {
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
-        }
+        // بارگذاری اولیه (اگر قبلاً وارد شده باشد)
+        window.addEventListener('load', () => {
+            const savedName = localStorage.getItem('chat_username');
+            if (savedName) {
+                usernameInput.value = savedName;
+                // با تاخیر کوچک وارد شو
+                setTimeout(() => loginBtn.click(), 100);
+            }
+        });
 
-        function hideMessage() {
-            messageDiv.style.display = 'none';
-            messageDiv.className = 'message';
-        }
-
-        document.getElementById('refreshHistory').addEventListener('click', loadHistory);
-
-        // بارگذاری اولیه
-        window.addEventListener('load', loadHistory);
+        // پاک کردن interval در صورت بسته شدن صفحه
+        window.addEventListener('beforeunload', () => {
+            if (loadInterval) clearInterval(loadInterval);
+        });
     </script>
 </body>
 </html>

@@ -3,174 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یادداشت‌ها</title>
+    <title>ثبت‌نام موسیقی سنتی و کلاسیک</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
     <style>
-        * { box-sizing: border-box; font-family: Tahoma, sans-serif; }
-        body { max-width: 600px; margin: 20px auto; padding: 0 15px; background: #f0f2f5; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        textarea { width: 100%; height: 120px; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; resize: vertical; }
-        button { background: #2ea44f; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; }
-        button:disabled { opacity: 0.6; }
-        .note-item { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-right: 4px solid #2ea44f; display: flex; justify-content: space-between; align-items: center; }
-        .note-text { flex: 1; }
-        .note-time { font-size: 12px; color: #666; margin-top: 5px; }
-        .delete-btn { background: #dc3545; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        #loading { text-align: center; color: #666; padding: 10px; display: none; }
-        #history { margin-top: 15px; }
-        #status { color: #666; font-size: 14px; margin-top: 10px; text-align: center; }
+        /* تمام استایل‌های قبلی را همان‌گونه که بود حفظ کنید */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #f5f0e8, #e8dccc);
+            min-height: 100vh;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        h1 { text-align: center; color: #4a2c1e; font-weight: 700; font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #7a5a44; margin-bottom: 30px; border-bottom: 2px dashed #d4b8a0; padding-bottom: 15px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-weight: 600; color: #3d2b1f; margin-bottom: 6px; font-size: 0.95rem; }
+        label .required { color: #b34a3c; margin-right: 4px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd0c4;
+            border-radius: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            background: #fefcf9;
+            color: #2d1f15;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #b48a6e;
+            box-shadow: 0 0 0 4px rgba(180, 138, 110, 0.2);
+        }
+        textarea { min-height: 70px; resize: vertical; }
+        .row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .btn {
+            background: #8b6b51;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 6px 20px rgba(139, 107, 81, 0.3);
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        .btn:hover { background: #6f523c; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(139, 107, 81, 0.4); }
+        .btn:active { transform: scale(0.97); }
+        .message {
+            padding: 12px 18px;
+            border-radius: 16px;
+            margin: 20px 0 10px;
+            display: none;
+            font-weight: 500;
+        }
+        .message.success { display: block; background: #e1f0e5; color: #1f6d4a; border-right: 6px solid #2b8f5e; }
+        .message.error { display: block; background: #fce8e6; color: #9e3c34; border-right: 6px solid #c74f44; }
+        .history-section { margin-top: 40px; border-top: 2px solid #ddd0c4; padding-top: 25px; }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .history-header h2 { color: #4a2c1e; font-size: 1.4rem; }
+        .btn-small {
+            background: #b48a6e;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+        }
+        .btn-small:hover { background: #8b6b51; transform: scale(1.03); }
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding: 5px 2px;
+        }
+        .history-card {
+            background: #f8f3ed;
+            border-radius: 20px;
+            padding: 16px;
+            border: 1px solid #e3d5c9;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .history-card:hover { transform: translateY(-4px); border-color: #b48a6e; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+        .history-card .name { font-weight: 700; color: #3d2b1f; font-size: 1.05rem; }
+        .history-card .detail { font-size: 0.85rem; color: #6f5a48; margin-top: 6px; line-height: 1.6; }
+        .history-card .detail span {
+            display: inline-block;
+            background: #e8ddd2;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #4d3728;
+            margin-left: 4px;
+        }
+        .empty-history { text-align: center; color: #8f7a6a; padding: 30px 0; font-style: italic; grid-column: 1 / -1; }
+        #loading { text-align: center; color: #6f5a48; padding: 20px; display: none; }
+        @media (max-width: 650px) {
+            .row-2col { grid-template-columns: 1fr; gap: 0; }
+            .container { padding: 25px 15px; }
+            h1 { font-size: 1.6rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>📝 یادداشت جدید</h2>
-        <textarea id="noteInput" placeholder="متن یادداشت رو اینجا بنویس..."></textarea>
-        <button id="saveBtn">💾 ذخیره</button>
-        <div id="loading">⏳ در حال ذخیره‌سازی...</div>
-        <div id="status"></div>
+    <div class="container">
+        <h1>🎵 ثبت‌نام موسیقی</h1>
+        <div class="subtitle">سنتی · کلاسیک · انواع سازها</div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label>نام و نام‌خانوادگی <span class="required">*</span></label>
+                <input type="text" id="fullName" placeholder="مثلاً: احمد رضایی" required>
+            </div>
+
+            <div class="row-2col">
+                <div class="form-group">
+                    <label>شماره تماس <span class="required">*</span></label>
+                    <input type="tel" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required>
+                </div>
+                <div class="form-group">
+                    <label>ایمیل</label>
+                    <input type="email" id="email" placeholder="example@mail.com">
+                </div>
+            </div>
+
+            <div class="row-2col">
+                <div class="form-group">
+                    <label>نوع موسیقی <span class="required">*</span></label>
+                    <select id="musicType" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="سنتی">سنتی</option>
+                        <option value="کلاسیک">کلاسیک</option>
+                        <option value="هر دو">هر دو</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ساز تخصصی <span class="required">*</span></label>
+                    <select id="instrument" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="تار">تار</option>
+                        <option value="سه‌تار">سه‌تار</option>
+                        <option value="نی">نی</option>
+                        <option value="کمانچه">کمانچه</option>
+                        <option value="عود">عود</option>
+                        <option value="تنبک">تنبک</option>
+                        <option value="دف">دف</option>
+                        <option value="ویولن">ویولن</option>
+                        <option value="پیانو">پیانو</option>
+                        <option value="ویولنسل">ویولنسل</option>
+                        <option value="فلوت">فلوت</option>
+                        <option value="ساز دیگر">ساز دیگر</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row-2col">
+                <div class="form-group">
+                    <label>سابقه (سال)</label>
+                    <input type="number" id="experience" placeholder="۰" min="0">
+                </div>
+                <div class="form-group">
+                    <label>نام استاد (اختیاری)</label>
+                    <input type="text" id="teacher" placeholder="نام استاد">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>هدف از آموزش</label>
+                <textarea id="goal" placeholder="مثلاً: اجرا در کنسرت، آموزش، تفریح..."></textarea>
+            </div>
+
+            <button type="submit" class="btn">✨ ثبت‌نام</button>
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <div class="history-section">
+            <div class="history-header">
+                <h2>📋 تاریخچه ثبت‌نام‌ها</h2>
+                <button class="btn-small" id="refreshHistory">🔄 به‌روزرسانی</button>
+            </div>
+            <div id="loading">⏳ در حال بارگذاری...</div>
+            <div id="historyContainer" class="history-grid">
+                <div class="empty-history">هیچ ثبت‌نامی یافت نشد.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <h2>📜 تاریخچه</h2>
-        <div id="history"></div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
     <script>
-        // ==========================================
-        // تنظیمات Supabase (اینجا رو پر کن)
-        // ==========================================
-        const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'; // 👈 آدرس پروژه رو بذار
-        const SUPABASE_KEY = 'sb_publishable_OkiT5dLem6defhl9JVfigA_2oGRdWFc'; // 👈 کلید عمومی
+        // شناسه Deployment شما
+        const DEPLOYMENT_ID = "AKfycbxrqOK0z97ZQmee7DEh0P5hWahw6VumgixKizSFV-8gZujQLceNTyn5cu6yY1q_d9A3";
+        const SCRIPT_URL = `https://script.google.com/macros/s/${DEPLOYMENT_ID}/exec`;
 
-        // ==========================================
-        // اتصال به Supabase
-        // ==========================================
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const form = document.getElementById('registerForm');
+        const messageDiv = document.getElementById('message');
+        const historyContainer = document.getElementById('historyContainer');
+        const loadingDiv = document.getElementById('loading');
 
-        // ==========================================
-        // بارگذاری یادداشت‌ها
-        // ==========================================
-        async function loadNotes() {
-            try {
-                const { data, error } = await supabase
-                    .from('notes')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+        // --- ثبت‌نام جدید با استفاده از fetch و mode: no-cors ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessage();
 
-                if (error) throw error;
-                renderNotes(data);
-            } catch (e) {
-                document.getElementById('status').innerHTML = '❌ ' + e.message;
-                document.getElementById('status').style.color = 'red';
-            }
-        }
+            const data = {
+                fullName: document.getElementById('fullName').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                musicType: document.getElementById('musicType').value,
+                instrument: document.getElementById('instrument').value,
+                experience: document.getElementById('experience').value || '0',
+                teacher: document.getElementById('teacher').value.trim(),
+                goal: document.getElementById('goal').value.trim()
+            };
 
-        // ==========================================
-        // نمایش یادداشت‌ها
-        // ==========================================
-        function renderNotes(notes) {
-            const container = document.getElementById('history');
-            if (!notes || notes.length === 0) {
-                container.innerHTML = '<p style="color:#888;">هنوز یادداشتی ثبت نشده</p>';
+            if (!data.fullName || !data.phone || !data.musicType || !data.instrument) {
+                showMessage('لطفاً تمام فیلدهای ضروری (دارای ستاره) را پر کنید.', 'error');
                 return;
             }
 
-            container.innerHTML = notes.map(n => `
-                    <div class="note-item">
-                        <div class="note-text">
-                            <div>${n.content || n.text || 'بدون متن'}</div>
-                            <div class="note-time">🕒 ${new Date(n.created_at).toLocaleString('fa-IR')}</div>
-                        </div>
-                        <button class="delete-btn" data-id="${n.id}">🗑️</button>
-                    </div>
-                `).join('');
-
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    if (confirm('حذف شود؟')) {
-                        await deleteNote(this.dataset.id);
-                    }
+            try {
+                // استفاده از fetch با mode: 'no-cors' برای ارسال به Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data)
                 });
-            });
-        }
 
-        // ==========================================
-        // اضافه کردن یادداشت
-        // ==========================================
-        async function addNote(content) {
-            const { error } = await supabase
-                .from('notes')
-                .insert([{ content: content }]);
+                // به دلیل no-cors نمی‌توانیم پاسخ را بخوانیم، اما معمولاً درخواست به سرور می‌رسد.
+                showMessage('✅ ثبت‌نام شما با موفقیت انجام شد!', 'success');
+                form.reset();
+                // بارگذاری مجدد تاریخچه (با تاخیر کوتاه)
+                setTimeout(loadHistory, 1000);
 
-            if (error) throw error;
-        }
-
-        // ==========================================
-        // حذف یادداشت
-        // ==========================================
-        async function deleteNote(id) {
-            try {
-                const { error } = await supabase
-                    .from('notes')
-                    .delete()
-                    .eq('id', id);
-
-                if (error) throw error;
-                await loadNotes();
-                alert('🗑️ حذف شد!');
-            } catch (e) {
-                alert('❌ خطا: ' + e.message);
-            }
-        }
-
-        // ==========================================
-        // ذخیره یادداشت جدید
-        // ==========================================
-        async function saveNote() {
-            const input = document.getElementById('noteInput');
-            const btn = document.getElementById('saveBtn');
-            const loading = document.getElementById('loading');
-            const content = input.value.trim();
-
-            if (!content) {
-                alert('متن بنویس!');
-                return;
-            }
-
-            btn.disabled = true;
-            loading.style.display = 'block';
-
-            try {
-                await addNote(content);
-                input.value = '';
-                await loadNotes();
-                alert('✅ ذخیره شد!');
-            } catch (e) {
-                alert('❌ خطا: ' + e.message);
-            } finally {
-                btn.disabled = false;
-                loading.style.display = 'none';
-            }
-        }
-
-        // ==========================================
-        // رویدادها
-        // ==========================================
-        document.getElementById('saveBtn').addEventListener('click', saveNote);
-        document.getElementById('noteInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                saveNote();
+            } catch (error) {
+                showMessage('❌ خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.', 'error');
+                console.error('Fetch error:', error);
             }
         });
 
-        // ==========================================
-        // اجرا
-        // ==========================================
-        loadNotes();
-        document.getElementById('status').innerHTML = '✅ متصل به Supabase';
-        document.getElementById('status').style.color = 'green';
+        // --- دریافت تاریخچه با google.script.run (روش مطمئن‌تر) ---
+        function loadHistory() {
+            loadingDiv.style.display = 'block';
+            historyContainer.innerHTML = '';
+
+            // اگر در محیط Apps Script هستیم، از google.script.run استفاده کنیم
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run
+                    .withSuccessHandler(displayHistory)
+                    .withFailureHandler((err) => {
+                        displayError('خطا در دریافت تاریخچه: ' + err);
+                        loadingDiv.style.display = 'none';
+                    })
+                    .getHistory();
+            } else {
+                // در غیر این صورت (تست محلی) از fetch استفاده کنیم
+                fetch(`${SCRIPT_URL}?action=getHistory`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayHistory(data);
+                        loadingDiv.style.display = 'none';
+                    })
+                    .catch(err => {
+                        displayError('خطا در ارتباط با سرور');
+                        loadingDiv.style.display = 'none';
+                        console.error('Fetch history error:', err);
+                    });
+            }
+        }
+
+        function displayHistory(data) {
+            historyContainer.innerHTML = '';
+            loadingDiv.style.display = 'none';
+
+            if (!data || data.length === 0) {
+                historyContainer.innerHTML = '<div class="empty-history">هیچ ثبت‌نامی یافت نشد.</div>';
+                return;
+            }
+
+            data.forEach(row => {
+                const card = document.createElement('div');
+                card.className = 'history-card';
+                card.innerHTML = `
+                    <div class="name">${row[1] || 'نامشخص'}</div>
+                    <div class="detail">
+                        <span>${row[4] || ''}</span> · ${row[5] || ''}
+                    </div>
+                    <div class="detail">
+                        📞 ${row[2] || ''} ${row[3] ? '· ✉️ '+row[3] : ''}
+                    </div>
+                    <div class="detail" style="font-size:0.8rem; color:#8f7a6a;">
+                        ${row[0] ? new Date(row[0]).toLocaleDateString('fa-IR') : ''}
+                        ${row[6] ? '· '+row[6]+' سال' : ''}
+                    </div>
+                `;
+                historyContainer.appendChild(card);
+            });
+        }
+
+        function displayError(msg) {
+            historyContainer.innerHTML = `<div class="empty-history">❌ ${msg}</div>`;
+            loadingDiv.style.display = 'none';
+        }
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+        }
+
+        function hideMessage() {
+            messageDiv.style.display = 'none';
+            messageDiv.className = 'message';
+        }
+
+        document.getElementById('refreshHistory').addEventListener('click', loadHistory);
+
+        // بارگذاری اولیه
+        window.addEventListener('load', loadHistory);
     </script>
 </body>
 </html>

@@ -3,439 +3,673 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>چت</title>
+    <title>سازمان اورژانس کشور | 115</title>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary: #ef4444;
+            --primary-dark: #dc2626;
+            --primary-glow: rgba(239, 68, 68, 0.35);
+            --accent: #38bdf8;
+            --bg-dark: #090d16;
+            --card-bg: rgba(22, 30, 46, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+            scroll-behavior: smooth;
         }
+
         body {
-            font-family: 'Tahoma', sans-serif;
-            background: #e5ddd5;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(239, 68, 68, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 65%, rgba(56, 189, 248, 0.05) 0%, transparent 40%);
+        }
+
+        /* Glassmorphism Header */
+        header {
+            background: rgba(9, 13, 22, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
-            padding: 10px;
+            padding: 16px 24px;
         }
-        .chat-container {
-            width: 100%;
-            max-width: 500px;
-            height: 95vh;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        /* ===== Header ===== */
-        .chat-header {
-            background: #075e54;
-            color: white;
-            padding: 15px 20px;
+
+        .logo-area {
             display: flex;
             align-items: center;
             gap: 15px;
-            flex-shrink: 0;
         }
-        .chat-header .avatar {
-            width: 40px;
-            height: 40px;
-            background: #128c7e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-        }
-        .chat-header .info {
-            flex: 1;
-        }
-        .chat-header .info h3 {
-            font-size: 16px;
-            margin-bottom: 2px;
-        }
-        .chat-header .info span {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-        .chat-header .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-        .chat-header .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        /* ===== Messages Area ===== */
-        .messages-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px 20px;
-            background: #e5ddd5;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .messages-area::-webkit-scrollbar {
-            width: 6px;
-        }
-        .messages-area::-webkit-scrollbar-thumb {
-            background: #b7b7b7;
-            border-radius: 10px;
-        }
-        
-        /* ===== Message Bubbles ===== */
-        .message {
-            max-width: 75%;
-            padding: 10px 14px;
+
+        .brand-badge {
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 1.3rem;
+            padding: 6px 16px;
             border-radius: 12px;
-            word-wrap: break-word;
-            position: relative;
-            animation: fadeIn 0.3s ease;
+            box-shadow: 0 0 20px var(--primary-glow);
+            letter-spacing: -1px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .brand-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .message .msg-user {
-            font-size: 12px;
-            font-weight: bold;
-            color: #075e54;
-            margin-bottom: 3px;
-        }
-        .message .msg-text {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .message .msg-time {
-            font-size: 10px;
-            color: #999;
-            text-align: left;
-            margin-top: 4px;
-        }
-        
-        /* پیام‌های خودم (چپ) */
-        .message.my-message {
-            background: #dcf8c6;
-            align-self: flex-end;
-            border-bottom-left-radius: 4px;
-        }
-        .message.my-message .msg-user {
-            color: #075e54;
-        }
-        
-        /* پیام‌های دیگران (راست) */
-        .message.other-message {
-            background: white;
-            align-self: flex-start;
-            border-bottom-right-radius: 4px;
-        }
-        .message.other-message .msg-user {
-            color: #128c7e;
-        }
-        
-        /* ===== Input Area ===== */
-        .input-area {
-            background: #f0f0f0;
-            padding: 10px 15px;
+
+        .call-115-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
             display: flex;
+            align-items: center;
             gap: 10px;
-            flex-shrink: 0;
-            border-top: 1px solid #ddd;
+            box-shadow: 0 0 25px var(--primary-glow);
+            transition: all 0.3s ease;
+            animation: pulse-red 2.5s infinite;
         }
-        .input-area input {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            border-radius: 25px;
-            font-size: 14px;
-            outline: none;
-            background: white;
+
+        .call-115-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.6);
         }
-        .input-area input:focus {
-            box-shadow: 0 0 0 2px #075e54;
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-        .input-area button {
-            background: #075e54;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
+
+        .menu-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            font-size: 1.4rem;
+            padding: 8px 14px;
+            border-radius: 10px;
             cursor: pointer;
             transition: 0.3s;
         }
-        .input-area button:hover {
-            background: #128c7e;
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
-        .input-area button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* ===== Login Screen ===== */
-        .login-screen {
+
+        /* Modern Drawer */
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid var(--card-border);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            background: #075e54;
-            color: white;
-            padding: 30px;
         }
-        .login-screen h2 {
-            font-size: 28px;
+
+        .drawer.open { right: 0; }
+
+        .drawer-header {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover { color: var(--primary); }
+
+        .drawer-menu { list-style: none; padding: 20px 0; }
+
+        .drawer-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 28px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .drawer-menu li a:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--text-main);
+            border-right: 4px solid var(--primary);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active { display: block; }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 100px 24px 80px 24px;
+            text-align: center;
+        }
+
+        .hero-container { max-width: 850px; margin: 0 auto; }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+        }
+
+        .hero-btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+        }
+
+        /* Section Layouts */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff;
             margin-bottom: 10px;
         }
-        .login-screen p {
-            opacity: 0.8;
-            margin-bottom: 30px;
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
         }
-        .login-screen input {
-            width: 100%;
-            max-width: 300px;
-            padding: 15px;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            text-align: center;
-            outline: none;
+
+        /* Glass Cards */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
         }
-        .login-screen input:focus {
-            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px 24px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
-        .login-screen button {
-            margin-top: 15px;
-            background: #128c7e;
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Emergency Steps Alert */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        .alert-box h3 {
+            color: #fca5a5;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .alert-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            list-style: none;
+        }
+
+        .step-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary);
+            font-size: 0.95rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            margin-bottom: 14px;
+            overflow: hidden;
             transition: 0.3s;
         }
-        .login-screen button:hover {
-            background: #0d6e63;
+
+        .faq-header {
+            padding: 20px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
         }
-        .login-error {
-            color: #ff6b6b;
+
+        .faq-content {
+            padding: 0 24px 20px 24px;
+            display: none;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             margin-top: 10px;
-            font-size: 14px;
+            padding-top: 16px;
         }
-        
-        /* ===== Hidden ===== */
-        .hidden {
-            display: none !important;
+
+        .faq-item.active {
+            border-color: rgba(239, 68, 68, 0.4);
         }
-        
-        /* ===== Responsive ===== */
-        @media (max-width: 600px) {
-            .chat-container {
-                height: 100vh;
-                border-radius: 0;
-            }
-            .message {
-                max-width: 85%;
-            }
+
+        .faq-item.active .faq-content { display: block; }
+
+        /* Footer */
+        footer {
+            background: rgba(5, 8, 15, 0.95);
+            border-top: 1px solid var(--card-border);
+            padding-top: 60px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 50px 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0; width: 40px; height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer-col ul li a:hover { color: var(--text-main); }
+
+        .footer-bottom {
+            background: #020408;
+            text-align: center;
+            padding: 20px 24px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.1rem; }
+            .brand-title { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="chat-container" id="app">
-        
-        <!-- ===== Login Screen ===== -->
-        <div class="login-screen" id="loginScreen">
-            <h2>💬 چت</h2>
-            <p>برای شروع نام خود را وارد کنید</p>
-            <input type="text" id="nameInput" placeholder="نام شما..." maxlength="30">
-            <button onclick="login()">ورود به چت</button>
-            <div class="login-error" id="loginError"></div>
-        </div>
-        
-        <!-- ===== Chat Interface ===== -->
-        <div id="chatInterface" class="hidden" style="display:flex;flex-direction:column;height:100%;">
-            
-            <!-- Header -->
-            <div class="chat-header">
-                <div class="avatar" id="userAvatar">👤</div>
-                <div class="info">
-                    <h3 id="displayName">کاربر</h3>
-                    <span id="onlineStatus">آنلاین</span>
-                </div>
-                <button class="logout-btn" onclick="logout()">خروج</button>
-            </div>
-            
-            <!-- Messages -->
-            <div class="messages-area" id="messagesArea">
-                <!-- پیام‌ها اینجا می‌آیند -->
-            </div>
-            
-            <!-- Input -->
-            <div class="input-area">
-                <input type="text" id="messageInput" placeholder="پیام خود را بنویسید..." 
-                       onkeydown="if(event.key==='Enter') sendMessage()">
-                <button id="sendBtn" onclick="sendMessage()">ارسال</button>
-            </div>
-        </div>
-    </div>
 
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Drawer Navigation -->
+    <nav class="drawer" id="drawer">
+        <div class="drawer-header">
+            <h3 style="color: #fff;">منوی دسترسی</h3>
+            <button class="close-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="drawer-menu">
+            <li><a href="#hero" onclick="toggleMenu()"><i class="fa-solid fa-house"></i> صفحه اصلی</a></li>
+            <li><a href="#guide" onclick="toggleMenu()"><i class="fa-solid fa-phone-volume"></i> راهنمای تماس</a></li>
+            <li><a href="#services" onclick="toggleMenu()"><i class="fa-solid fa-truck-medical"></i> خدمات امداد</a></li>
+            <li><a href="#first-aid" onclick="toggleMenu()"><i class="fa-solid fa-heart-pulse"></i> کمک‌های اولیه</a></li>
+            <li><a href="#faq" onclick="toggleMenu()"><i class="fa-solid fa-circle-question"></i> سوالات متداول</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <button class="menu-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+                <div class="brand-badge">۱۱۵</div>
+                <div class="brand-title">سازمان اورژانس کشور</div>
+            </div>
+            <a href="tel:115" class="call-115-btn">
+                <i class="fa-solid fa-phone"></i>
+                <span>تماس فوری با ۱۱۵</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-container">
+            <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> سامانه رسمی امداد پیش‌بیمارستانی</span>
+            <h1>مرکز فوریت‌های پزشکی و امداد سریع کشور</h1>
+            <p>ارائه خدمات تخصصی درمانی و انتقال اضطراری به صورت شبانه‌روزی و رایگان در سراسر ایران</p>
+            <div class="hero-btn-group">
+                <a href="tel:115" class="btn btn-primary"><i class="fa-solid fa-phone-flip"></i> اعلام حادثه (۱۱۵)</a>
+                <a href="#first-aid" class="btn btn-outline"><i class="fa-solid fa-book-medical"></i> آموزش‌های حیاتی نجات</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Guide Alert -->
+    <section class="section" id="guide" style="padding-top: 0;">
+        <div class="alert-box">
+            <h3><i class="fa-solid fa-triangle-exclamation"></i> اقدامات حیاتی هنگام تماس با ۱۱۵</h3>
+            <div class="alert-steps">
+                <div class="step-item"><strong>۱. حفظ آرامش:</strong> پاسخ دقیق و کوتاه به سوالات کارشناس</div>
+                <div class="step-item"><strong>۲. اعلام آدرس:</strong> ذکر خیابان اصلی، فرعی و پلاک دقیق</div>
+                <div class="step-item"><strong>۳. وضعیت بیمار:</strong> اعلام علائم (هوشیاری، تنفس، خونریزی)</div>
+                <div class="step-item"><strong>۴. باز نگه داشتن خط:</strong> قطع نکردن تماس تا دستور کارشناس</div>
+            </div>
+        </div>
+
+        <!-- Services -->
+        <div class="section-header" id="services">
+            <h2 class="section-title">بخش‌های تخصصی امداد</h2>
+            <p class="section-subtitle">پوشش جامع فوریت‌های پزشکی در تمامی شرایط جغرافیایی</p>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-ambulance"></i></div>
+                <h3 class="card-title">امداد شهری و جاده‌ای</h3>
+                <p class="card-desc">استقرار بیش از ۳۰۰۰ پایگاه فعال در سراسر کشور جهت رسیدن سریع به محل حادثه.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-helicopter"></i></div>
+                <h3 class="card-title">اورژانس هوایی</h3>
+                <p class="card-desc">انتقال فوق سریع بیماران حاد و مصدومان تصادفات جاده‌ای در مناطق صعب‌العبور.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                <h3 class="card-title">موتورلانس (موتور امداد)</h3>
+                <p class="card-desc">عبور سریع از ترافیک کلان‌شهرها و شروع اقدامات درمانی اولیه در کمترین زمان.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-user-nurse"></i></div>
+                <h3 class="card-title">اورژانس بانوان</h3>
+                <p class="card-desc">ارائه خدمات تخصصی توسط کادر مجرب کارشناسان بانوان در شرایط خاص.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- First Aid Section -->
+    <section class="section" id="first-aid">
+        <div class="section-header">
+            <h2 class="section-title">راهنمای اقدامات فوری حیاتی</h2>
+            <p class="section-subtitle">اصول پایه‌ای که می‌تواند قبل از رسیدن آمبولانس جان یک انسان را نجات دهد</p>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-icon" style="color: #f43f5e; background: rgba(244, 63, 94, 0.1);"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3 class="card-title">احیای قلبی (CPR)</h3>
+                <p class="card-desc">در صورت عدم تنفس، مرکز قفسه سینه را با سرعت ۱۰۰ تا ۱۲۰ بار در دقیقه با عمق ۵ سانتی‌متر فشار دهید.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="color: #fbbf24; background: rgba(251, 191, 36, 0.1);"><i class="fa-solid fa-lungs"></i></div>
+                <h3 class="card-title">انسداد راه هوایی</h3>
+                <p class="card-desc">در صورت خفگی، پشت مصدوم ایستاده و با فشار سریع دست‌ها به سمت بالا و داخل (مانور هایملیک) جسم را خارج کنید.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="color: #38bdf8; background: rgba(56, 189, 248, 0.1);"><i class="fa-solid fa-droplet"></i></div>
+                <h3 class="card-title">کنترل خونریزی</h3>
+                <p class="card-desc">محل خونریزی را با پارچه تمیز به طور مستقیم و محکم فشار دهید و عضو را بالاتر از سطح قلب بگذارید.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+        <div class="section-header">
+            <h2 class="section-title">سوالات متداول</h2>
+            <p class="section-subtitle">پاسخ به سوالات رایج شهروندان</p>
+        </div>
+
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="faq-item">
+                <div class="faq-header" onclick="toggleFaq(this)">
+                    <span>آیا خدمات اورژانس ۱۱۵ دارای هزینه است؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-content">خیر، کلیه خدمات امداد، انتقال و درمان پیش‌بیمارستانی توسط اورژانس ۱۱۵ کاملاً رایگان می‌باشد.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-header" onclick="toggleFaq(this)">
+                    <span>در چه مواردی باید حتماً با ۱۱۵ تماس بگیریم؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-content">در صورت بروز دردهای شدید قفسه سینه، تنگی نفس حاد، کاهش هوشیاری، تصادفات منجر به جرح، تشنج و سوختگی‌های وسیع.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>سازمان اورژانس کشور</h4>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">مرکز فوریت‌های پزشکی به صورت ۲۴ ساعته در ۳۶۵ روز سال در خدمت هم‌وطنان گرامی است.</p>
+            </div>
+            <div class="footer-col">
+                <h4>دسترسی سریع</h4>
+                <ul>
+                    <li><a href="#hero">صفحه اصلی</a></li>
+                    <li><a href="#services">خدمات امدادی</a></li>
+                    <li><a href="#first-aid">راهنمای احیا</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>شماره‌های اضطراری</h4>
+                <ul>
+                    <li>اورژانس کشور: ۱۱۵</li>
+                    <li>هلال احمر: ۱۱۲</li>
+                    <li>آتش‌نشانی: ۱۲۵</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            ساخته شده توسط امیرحسین
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
     <script>
-        // ====== متغیرها ======
-        let currentUser = '';
-        let messageInterval = null;
-        const messagesArea = document.getElementById('messagesArea');
-        
-        // ====== ورود ======
-        window.login = function() {
-            const nameInput = document.getElementById('nameInput');
-            const name = nameInput.value.trim();
-            const error = document.getElementById('loginError');
-            
-            if (!name || name.length < 2) {
-                error.textContent = 'لطفاً نام معتبر وارد کنید (حداقل ۲ حرف)';
-                return;
-            }
-            
-            error.textContent = '';
-            
-            // ذخیره نام کاربر
-            google.script.run
-                .withSuccessHandler(function(result) {
-                    if (result.success) {
-                        currentUser = name;
-                        document.getElementById('displayName').textContent = name;
-                        document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
-                        document.getElementById('loginScreen').classList.add('hidden');
-                        document.getElementById('chatInterface').style.display = 'flex';
-                        document.getElementById('messageInput').focus();
-                        loadMessages();
-                        // هر ۳ ثانیه پیام‌ها رو چک کن
-                        if (messageInterval) clearInterval(messageInterval);
-                        messageInterval = setInterval(loadMessages, 3000);
-                    } else {
-                        error.textContent = 'خطا در ثبت نام: ' + result.message;
-                    }
-                })
-                .withFailureHandler(function(err) {
-                    error.textContent = 'خطا در ارتباط با سرور';
-                    console.error(err);
-                })
-                .saveUser(name);
-        };
-        
-        // ====== خروج ======
-        window.logout = function() {
-            if (messageInterval) {
-                clearInterval(messageInterval);
-                messageInterval = null;
-            }
-            currentUser = '';
-            document.getElementById('chatInterface').style.display = 'none';
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('nameInput').value = '';
-            document.getElementById('nameInput').focus();
-        };
-        
-        // ====== ارسال پیام ======
-        window.sendMessage = function() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (!message || !currentUser) return;
-            
-            const btn = document.getElementById('sendBtn');
-            btn.disabled = true;
-            
-            google.script.run
-                .withSuccessHandler(function(result) {
-                    if (result.success) {
-                        input.value = '';
-                        loadMessages();
-                    } else {
-                        alert('خطا در ارسال پیام: ' + result.message);
-                    }
-                    btn.disabled = false;
-                    input.focus();
-                })
-                .withFailureHandler(function(err) {
-                    alert('خطا در ارتباط با سرور');
-                    btn.disabled = false;
-                })
-                .saveMessage(currentUser, message);
-        };
-        
-        // ====== دریافت و نمایش پیام‌ها ======
-        window.loadMessages = function() {
-            google.script.run
-                .withSuccessHandler(function(messages) {
-                    renderMessages(messages);
-                })
-                .withFailureHandler(function(err) {
-                    console.error('خطا در دریافت پیام‌ها:', err);
-                })
-                .getMessages();
-        };
-        
-        function renderMessages(messages) {
-            if (!messages || messages.length === 0) {
-                messagesArea.innerHTML = `
-                    <div style="text-align:center;color:#999;margin-top:30px;font-size:14px;">
-                        🗨️ هنوز پیامی ارسال نشده است<br>
-                        <span style="font-size:12px;">اولین پیام را شما بفرستید!</span>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            let lastUser = '';
-            
-            messages.forEach((msg, index) => {
-                const isMyMessage = (msg.userName === currentUser);
-                const showUser = (msg.userName !== lastUser);
-                lastUser = msg.userName;
-                
-                html += `
-                    <div class="message ${isMyMessage ? 'my-message' : 'other-message'}">
-                        ${!isMyMessage && showUser ? `<div class="msg-user">${msg.userName}</div>` : ''}
-                        <div class="msg-text">${escapeHtml(msg.message)}</div>
-                        <div class="msg-time">${msg.timestamp || ''}</div>
-                    </div>
-                `;
-            });
-            
-            messagesArea.innerHTML = html;
-            // اسکرول به پایین
-            messagesArea.scrollTop = messagesArea.scrollHeight;
+        function toggleMenu() {
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('active');
         }
-        
-        // ====== امنیت: جلوگیری از XSS ======
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+            const icon = element.querySelector('i');
+            if (item.classList.contains('active')) {
+                icon.className = 'fa-solid fa-chevron-up';
+            } else {
+                icon.className = 'fa-solid fa-chevron-down';
+            }
         }
-        
-        // ====== ورود با Enter ======
-        document.getElementById('nameInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') login();
-        });
     </script>
 </body>
 </html>

@@ -1,418 +1,419 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💬 چت عمومی</title>
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: linear-gradient(135deg, #e8f0fe, #d4e4f7);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .chat-container {
-            max-width: 800px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.15);
-            border: 1px solid rgba7/29/2026 14:57:55	9 آذر 1406	1:27	سلام	هیهینینینیههین																					(255, 255, 255, 0.3);
-        }
-        .chat-header {
-            text-align: center;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #d4e0ed;
-            margin-bottom: 20px;
-        }
-        .chat-header h1 {
-            color: #1a3a5c;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        .chat-header p {
-            color: #4a6a8a;
-            font-size: 0.9rem;
-        }
-        .login-section {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .login-section input {
-            flex: 1;
-            padding: 12px 18px;
-            border: 2px solid #c0d0e0;
-            border-radius: 30px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 1rem;
-            transition: 0.3s;
-            background: #f8faff;
-        }
-        .login-section input:focus {
-            outline: none;
-            border-color: #4a8ab5;
-            box-shadow: 0 0 0 4px rgba(74, 138, 181, 0.1);
-        }
-        .login-section button {
-            padding: 12px 30px;
-            background: #1a5a7a;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .login-section button:hover {
-            background: #0e3d5a;
-            transform: scale(1.02);
-        }
-        .chat-box {
-            background: #f2f7fc;
-            border-radius: 20px;
-            padding: 15px;
-            height: 400px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            border: 1px solid #dce8f2;
-        }
-        .message-item {
-            background: white;
-            padding: 12px 16px;
-            border-radius: 16px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            border-right: 4px solid #4a8ab5;
-        }
-        .message-item .username {
-            font-weight: 700;
-            color: #1a3a5c;
-            font-size: 0.95rem;
-        }
-        .message-item .time {
-            float: left;
-            color: #7a8a9a;
-            font-size: 0.75rem;
-            background: #eef4f9;
-            padding: 2px 10px;
-            border-radius: 30px;
-        }
-        .message-item .text {
-            margin-top: 6px;
-            color: #2a3a4a;
-            font-size: 0.95rem;
-            word-wrap: break-word;
-        }
-        .message-item .date {
-            color: #7a8a9a;
-            font-size: 0.7rem;
-            margin-top: 4px;
-        }
-        .input-section {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .input-section input {
-            flex: 1;
-            padding: 12px 18px;
-            border: 2px solid #c0d0e0;
-            border-radius: 30px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 1rem;
-            transition: 0.3s;
-            background: #f8faff;
-        }
-        .input-section input:focus {
-            outline: none;
-            border-color: #4a8ab5;
-            box-shadow: 0 0 0 4px rgba(74, 138, 181, 0.1);
-        }
-        .input-section button {
-            padding: 12px 30px;
-            background: #4a8ab5;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .input-section button:hover {
-            background: #2a6a8a;
-            transform: scale(1.02);
-        }
-        .input-section button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .status {
-            text-align: center;
-            color: #4a6a8a;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            min-height: 24px;
-        }
-        .empty-chat {
-            text-align: center;
-            color: #7a8a9a;
-            padding: 40px 0;
-        }
-        @media (max-width: 600px) {
-            .login-section, .input-section {
-                flex-direction: column;
-            }
-            .login-section button, .input-section button {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>چت عمومی تلگرامی</title>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    body {
+      background-color: #0e1621;
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Modal برای دریافت نام کاربری */
+    .login-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(14, 22, 33, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .login-box {
+      background: #17212b;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      text-align: center;
+      width: 90%;
+      max-width: 360px;
+    }
+
+    .login-box h2 {
+      margin-bottom: 15px;
+      color: #5288c1;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #242f3d;
+      background: #242f3d;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 15px;
+      outline: none;
+      text-align: center;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #5288c1;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .login-box button:hover {
+      background: #4170a2;
+    }
+
+    /* کانتینر اصلی چت */
+    .chat-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      background: #0e1621;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    /* هدر چت */
+    .chat-header {
+      background: #17212b;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #101921;
+      z-index: 10;
+    }
+
+    .chat-header .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-header .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #5288c1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .chat-header .title-details h3 {
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .chat-header .title-details p {
+      font-size: 12px;
+      color: #7f91a4;
+    }
+
+    .update-btn {
+      background: transparent;
+      border: none;
+      color: #5288c1;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .update-btn:hover {
+      background: rgba(82, 136, 193, 0.1);
+    }
+
+    .update-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* بدنه چت (محل نمایش پیام‌ها) */
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-image: radial-gradient(#17212b 1px, transparent 0);
+      background-size: 16px 16px;
+      background-position: -19px -19px;
+    }
+
+    /* ساختار پیام‌ها */
+    .message {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      position: relative;
+      word-wrap: break-word;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message.outgoing {
+      align-self: flex-start; /* جهت راست برای فارسی */
+      background: #2b5278;
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .message.incoming {
+      align-self: flex-end; /* جهت چپ برای بقیه کاربران */
+      background: #182533;
+      color: #fff;
+      border-bottom-left-radius: 2px;
+    }
+
+    .message .username {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ee6a5d;
+      margin-bottom: 3px;
+    }
+
+    .message.outgoing .username {
+      color: #64b5f6;
+    }
+
+    .message .text {
+      margin-bottom: 4px;
+      white-space: pre-wrap;
+    }
+
+    .message .time {
+      font-size: 10px;
+      color: #7f91a4;
+      align-self: flex-end;
+      margin-top: 2px;
+    }
+
+    /* بخش ارسال پیام */
+    .chat-input-area {
+      background: #17212b;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      background: #0e1621;
+      border: 1px solid #242f3d;
+      padding: 12px 16px;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .send-btn {
+      background: #5288c1;
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover {
+      background: #4170a2;
+    }
+
+    .send-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      transform: rotate(180deg);
+    }
+
+    /* لودینگ */
+    .loading-spinner {
+      text-align: center;
+      color: #7f91a4;
+      font-size: 13px;
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>💬 چت عمومی</h1>
-            <p>گفت‌وگوی آزاد و دوستانه</p>
-        </div>
 
-        <!-- بخش ورود / تعیین نام -->
-        <div id="loginArea" class="login-section">
-            <input type="text" id="usernameInput" placeholder="نام خود را وارد کنید..." maxlength="20">
-            <button id="loginBtn">✅ ورود به چت</button>
-        </div>
+  <!-- پنجره دریافت نام کاربری -->
+  <div class="login-modal" id="loginModal">
+    <div class="login-box">
+      <h2>ورود به چت</h2>
+      <p style="color: #7f91a4; font-size: 13px; margin-bottom: 15px;">لطفاً نام کاربری خود را وارد کنید:</p>
+      <input type="text" id="usernameInput" placeholder="نام شما..." maxlength="20" autofocus>
+      <button onclick="startChat()">ورود به برنامه</button>
+    </div>
+  </div>
 
-        <!-- بخش چت (پس از ورود) -->
-        <div id="chatArea" style="display: none;">
-            <div class="chat-box" id="chatBox">
-                <div class="empty-chat">در حال بارگذاری پیام‌ها...</div>
-            </div>
-
-            <div class="input-section">
-                <input type="text" id="messageInput" placeholder="پیام خود را بنویسید..." maxlength="500">
-                <button id="sendBtn">📤 ارسال</button>
-            </div>
-            <div class="status" id="status"></div>
+  <!-- برنامه اصلی چت -->
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="user-info">
+        <div class="avatar" id="headerAvatar">G</div>
+        <div class="title-details">
+          <h3>گروه چت عمومی</h3>
+          <p id="currentUserDisplay">درحال دریافت...</p>
         </div>
+      </div>
+      <button class="update-btn" onclick="fetchMessages()" title="بروزرسانی پیام‌ها">
+        <svg viewBox="0 0 24 24">
+          <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+      </button>
     </div>
 
-    <script>
-        // شناسه Deployment شما
-        const DEPLOYMENT_ID = "AKfycbxrqOK0z97ZQmee7DEh0P5hWahw6VumgixKizSFV-8gZujQLceNTyn5cu6yY1q_d9A3";
-        const SCRIPT_URL = `https://script.google.com/macros/s/${DEPLOYMENT_ID}/exec`;
+    <div class="chat-messages" id="chatMessages">
+      <div class="loading-spinner" id="loadingText">در حال دریافت پیام‌ها...</div>
+    </div>
 
-        // عناصر DOM
-        const loginArea = document.getElementById('loginArea');
-        const chatArea = document.getElementById('chatArea');
-        const usernameInput = document.getElementById('usernameInput');
-        const loginBtn = document.getElementById('loginBtn');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const chatBox = document.getElementById('chatBox');
-        const status = document.getElementById('status');
+    <div class="chat-input-area">
+      <input type="text" id="messageInput" placeholder="پیام خود را بنویسید..." onkeypress="handleKeyPress(event)">
+      <button class="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-        let currentUsername = '';
-        let isLoading = false;
-        let loadInterval = null;
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrqOK0z97ZQmee7DEh0P5hWahw6VumgixKizSFV-8gZujQLceNTyn5cu6yY1q_d9A3/exec";
+    
+    let currentUsername = "";
+    let lastMessagesCount = 0;
 
-        // --- ورود به چت ---
-        loginBtn.addEventListener('click', () => {
-            const name = usernameInput.value.trim();
-            if (!name) {
-                status.textContent = '⚠️ لطفاً نام خود را وارد کنید.';
-                return;
-            }
-            currentUsername = name;
-            loginArea.style.display = 'none';
-            chatArea.style.display = 'block';
-            status.textContent = `👤 خوش آمدید، ${currentUsername}!`;
-            
-            // ذخیره نام در localStorage
-            localStorage.setItem('chat_username', currentUsername);
-            
-            // بارگذاری پیام‌ها
-            loadMessages();
-            
-            // بارگذاری خودکار هر 3 ثانیه
-            if (loadInterval) clearInterval(loadInterval);
-            loadInterval = setInterval(loadMessages, 3000);
-        });
+    function startChat() {
+      const name = document.getElementById("usernameInput").value.trim();
+      if (!name) {
+        alert("لطفاً یک نام کاربری وارد کنید!");
+        return;
+      }
+      currentUsername = name;
+      document.getElementById("loginModal").style.display = "none";
+      document.getElementById("currentUserDisplay").innerText = "کاربر: " + currentUsername;
+      document.getElementById("headerAvatar").innerText = currentUsername.charAt(0).toUpperCase();
 
-        // با Enter در فیلد نام
-        usernameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loginBtn.click();
-        });
+      fetchMessages();
+      // بروزرسانی خودکار هر ۳ ثانیه
+      setInterval(fetchMessages, 3000);
+    }
 
-        // --- ارسال پیام ---
-        sendBtn.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+    function fetchMessages() {
+      fetch(`${SCRIPT_URL}?action=getMessages`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            renderMessages(data.messages);
+          }
+        })
+        .catch(error => console.error("Error fetching messages:", error));
+    }
 
-        function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text) return;
-            if (!currentUsername) {
-                status.textContent = '⚠️ ابتدا وارد شوید.';
-                return;
-            }
+    function renderMessages(messages) {
+      const container = document.getElementById("chatMessages");
+      container.innerHTML = "";
 
-            sendBtn.disabled = true;
-            status.textContent = '⏳ در حال ارسال...';
+      if (messages.length === 0) {
+        container.innerHTML = '<div class="loading-spinner">هنوز پیامی ارسال نشده است.</div>';
+        return;
+      }
 
-            const data = {
-                username: currentUsername,
-                message: text
-            };
+      messages.forEach(msg => {
+        const isSelf = msg.username === currentUsername;
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${isSelf ? 'outgoing' : 'incoming'}`;
 
-            // استفاده از google.script.run (در محیط Apps Script)
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-                google.script.run
-                    .withSuccessHandler((response) => {
-                        if (response.success) {
-                            messageInput.value = '';
-                            status.textContent = '✅ پیام ارسال شد!';
-                            loadMessages();
-                        } else {
-                            status.textContent = '❌ ' + response.message;
-                        }
-                        sendBtn.disabled = false;
-                    })
-                    .withFailureHandler((error) => {
-                        status.textContent = '❌ خطا: ' + error;
-                        sendBtn.disabled = false;
-                    })
-                    .sendMessage(data);
-            } else {
-                // Fallback: استفاده از fetch
-                fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(data)
-                })
-                .then(() => {
-                    messageInput.value = '';
-                    status.textContent = '✅ پیام ارسال شد!';
-                    loadMessages();
-                    sendBtn.disabled = false;
-                })
-                .catch((error) => {
-                    status.textContent = '❌ خطا: ' + error;
-                    sendBtn.disabled = false;
-                });
-            }
-        }
+        msgDiv.innerHTML = `
+          <span class="username">${escapeHtml(msg.username)}</span>
+          <span class="text">${escapeHtml(msg.message)}</span>
+          <span class="time">${escapeHtml(msg.timestamp)}</span>
+        `;
 
-        // --- دریافت و نمایش پیام‌ها ---
-        function loadMessages() {
-            if (isLoading) return;
-            isLoading = true;
+        container.appendChild(msgDiv);
+      });
 
-            // ابتدا پیام "در حال بارگذاری..." را نمایش بده
-            if (chatBox.children.length === 0) {
-                chatBox.innerHTML = '<div class="empty-chat">⏳ در حال بارگذاری...</div>';
-            }
+      // اسکرول هوشمند به انتهای صفحه (جدیدترین پیام‌ها در پایین)
+      if (messages.length !== lastMessagesCount) {
+        container.scrollTop = container.scrollHeight;
+        lastMessagesCount = messages.length;
+      }
+    }
 
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-                google.script.run
-                    .withSuccessHandler((messages) => {
-                        displayMessages(messages);
-                        isLoading = false;
-                    })
-                    .withFailureHandler((error) => {
-                        console.error('Error loading messages:', error);
-                        status.textContent = '❌ خطا در دریافت پیام‌ها: ' + error;
-                        chatBox.innerHTML = '<div class="empty-chat">❌ خطا در دریافت پیام‌ها</div>';
-                        isLoading = false;
-                    })
-                    .getChatHistory();
-            } else {
-                // Fallback: fetch
-                fetch(`${SCRIPT_URL}?action=getHistory`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        return response.json();
-                    })
-                    .then(messages => {
-                        displayMessages(messages);
-                        isLoading = false;
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        status.textContent = '❌ خطا در دریافت پیام‌ها';
-                        chatBox.innerHTML = '<div class="empty-chat">❌ خطا در دریافت پیام‌ها</div>';
-                        isLoading = false;
-                    });
-            }
-        }
+    function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const text = input.value.trim();
 
-        function displayMessages(messages) {
-            chatBox.innerHTML = '';
-            
-            if (!messages || messages.length === 0) {
-                chatBox.innerHTML = '<div class="empty-chat">💬 پیامی وجود ندارد. اولین نفر باشید! 🎉</div>';
-                return;
-            }
+      if (!text || !currentUsername) return;
 
-            messages.forEach(msg => {
-                // ساختار: [تاریخ میلادی, تاریخ شمسی, ساعت, نام, پیام]
-                const date = msg[1] || 'تاریخ نامشخص';
-                const time = msg[2] || '';
-                const username = msg[3] || 'ناشناس';
-                const text = msg[4] || '';
+      input.value = "";
 
-                const item = document.createElement('div');
-                item.className = 'message-item';
-                item.innerHTML = `
-                    <div>
-                        <span class="username">${escapeHtml(username)}</span>
-                        <span class="time">🕐 ${escapeHtml(time)}</span>
-                    </div>
-                    <div class="text">${escapeHtml(text)}</div>
-                    <div class="date">📅 ${escapeHtml(date)}</div>
-                `;
-                chatBox.appendChild(item);
-            });
+      const url = `${SCRIPT_URL}?action=sendMessage&username=${encodeURIComponent(currentUsername)}&message=${encodeURIComponent(text)}`;
 
-            // اسکرول به پایین
-            chatBox.scrollTop = chatBox.scrollHeight;
-            status.textContent = `✅ ${messages.length} پیام بارگذاری شد`;
-        }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            fetchMessages();
+          } else {
+            alert("خطا در ارسال پیام!");
+          }
+        })
+        .catch(error => console.error("Error sending message:", error));
+    }
 
-        // تابع امنیتی برای جلوگیری از XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+    function handleKeyPress(e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    }
 
-        // بارگذاری اولیه (اگر قبلاً وارد شده باشد)
-        window.addEventListener('load', () => {
-            const savedName = localStorage.getItem('chat_username');
-            if (savedName) {
-                usernameInput.value = savedName;
-                // با تاخیر کوچک وارد شو
-                setTimeout(() => loginBtn.click(), 100);
-            }
-        });
-
-        // پاک کردن interval در صورت بسته شدن صفحه
-        window.addEventListener('beforeunload', () => {
-            if (loadInterval) clearInterval(loadInterval);
-        });
-    </script>
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
 </body>
 </html>
